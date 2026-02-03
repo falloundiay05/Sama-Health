@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mes Tickets - Sama Health</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Page Spécifique - Tickets */
+        .page-header {
+            background: linear-gradient(135deg, #f0f7ff 0%, #e6f2ff 100%);
+            padding: 4rem 0;
+            margin-bottom: 3rem;
+        }
+        
+        .page-header-content {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .page-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+        
+        .page-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            margin-bottom: 2rem;
+        }
+        
+        /* Actions rapides */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        
+        .action-card {
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+            text-align: center;
+            transition: var(--transition);
+        }
+        
+        .action-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .action-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(52, 168, 83, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            color: var(--secondary-color);
+            font-size: 1.5rem;
+        }
+        
+        .action-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+        
+        /* Filtres */
+        .tickets-filters {
+            background: white;
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .filter-label {
+            font-weight: 500;
+            color: var(--text-color);
+        }
+        
+        .filter-select {
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            background: white;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        /* Liste des tickets */
+        .tickets-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        
+        .ticket-card {
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+        
+        .ticket-card:hover {
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .ticket-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            background: var(--bg-light);
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .ticket-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .ticket-qr-icon {
+            width: 50px;
+            height: 50px;
+            background: white;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            border: 2px solid var(--border-color);
+        }
+        
+        .ticket-details {
+            flex: 1;
+        }
+        
+        .ticket-number {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            margin-bottom: 0.25rem;
+        }
+        
+        .ticket-service {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        .ticket-status {
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .status-active {
+            background: rgba(52, 168, 83, 0.1);
+            color: var(--secondary-color);
+        }
+        
+        .status-used {
+            background: rgba(108, 117, 125, 0.1);
+            color: #6c757d;
+        }
+        
+        .status-expired {
+            background: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
+        }
+        
+        .ticket-content {
+            padding: 1.5rem;
+        }
+        
+        .ticket-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .ticket-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+        
+        .ticket-label {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+        
+        .ticket-value {
+            font-weight: 500;
+            color: var(--text-color);
+        }
+        
+        .ticket-actions {
+            display: flex;
+            gap: 0.5rem;
+            border-top: 1px solid var(--border-color);
+            padding-top: 1.5rem;
+        }
+        
+        /* Modal QR Code */
+        .qr-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .qr-modal.active {
+            display: flex;
+        }
+        
+        .qr-modal-content {
+            background: white;
+            border-radius: var(--radius);
+            padding: 2rem;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            animation: modalFadeIn 0.3s ease;
+        }
+        
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .qr-code {
+            width: 200px;
+            height: 200px;
+            background: #f8f9fa;
+            border-radius: var(--radius);
+            margin: 1.5rem auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: var(--text-lighter);
+        }
+        
+        .qr-info {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .qr-number {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .qr-service {
+            color: var(--text-light);
+        }
+        
+        /* Statistiques */
+        .stats-section {
+            background: var(--bg-light);
+            padding: 3rem 0;
+            margin-top: 3rem;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 2rem;
+            border-radius: var(--radius);
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+        
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(42, 110, 143, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            color: var(--primary-color);
+            font-size: 1.5rem;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            color: var(--text-light);
+        }
+        
+        /* Message aucun ticket */
+        .no-tickets {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+        
+        .no-tickets-icon {
+            font-size: 4rem;
+            color: #ccc;
+            margin-bottom: 1.5rem;
+        }
+        
+        .no-tickets h3 {
+            margin-bottom: 1rem;
+            color: var(--text-color);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .ticket-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .ticket-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .tickets-filters {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .filter-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <img src="images/logo.png" alt="Sama Health" class="navbar-logo">
+                <span>Sama Health</span>
+            </a>
+            <button class="menu-toggle" aria-label="Menu">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="nav-links">
+                <a href="index.html"><i class="fas fa-home"></i> Accueil</a>
+                <a href="hospitals.html"><i class="fas fa-hospital"></i> Établissements</a>
+                <a href="specialties.html"><i class="fas fa-user-md"></i> Services</a>
+                <div class="auth-links">
+                    <div id="profile-menu">
+                        <!-- Le menu de profil sera chargé dynamiquement -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- En-tête de page -->
+    <header class="page-header">
+        <div class="container">
+            <div class="page-header-content">
+                <h1 class="page-title">Mes Tickets</h1>
+                <p class="page-subtitle">Gérez vos tickets médicaux et accédez rapidement à vos QR codes</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Contenu principal -->
+    <main class="container">
+        <!-- Actions rapides -->
+        <div class="quick-actions">
+            <div class="action-card" onclick="buyTicket()">
+                <div class="action-icon">
+                    <i class="fas fa-ticket-alt"></i>
+                </div>
+                <h3 class="action-title">Acheter un ticket</h3>
+                <p>Achetez un ticket pour une consultation médicale</p>
+            </div>
+            
+            <div class="action-card" onclick="showAllTickets()">
+                <div class="action-icon">
+                    <i class="fas fa-list"></i>
+                </div>
+                <h3 class="action-title">Voir tous les tickets</h3>
+                <p>Consultez l'historique de vos tickets</p>
+            </div>
+            
+            <div class="action-card" onclick="showActiveTickets()">
+                <div class="action-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h3 class="action-title">Tickets actifs</h3>
+                <p>Vos tickets disponibles et valides</p>
+            </div>
+            
+            <div class="action-card" onclick="window.print()">
+                <div class="action-icon">
+                    <i class="fas fa-print"></i>
+                </div>
+                <h3 class="action-title">Imprimer</h3>
+                <p>Imprimez vos tickets et QR codes</p>
+            </div>
+        </div>
+
+        <!-- Filtres -->
+        <div class="tickets-filters">
+            <div class="filter-group">
+                <label class="filter-label">Filtrer par :</label>
+                <select id="status-filter" class="filter-select">
+                    <option value="all">Tous les statuts</option>
+                    <option value="active">Actifs</option>
+                    <option value="used">Utilisés</option>
+                    <option value="expired">Expirés</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <label class="filter-label">Trier par :</label>
+                <select id="sort-filter" class="filter-select">
+                    <option value="recent">Plus récents</option>
+                    <option value="oldest">Plus anciens</option>
+                    <option value="price">Prix</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <label class="filter-label">Rechercher :</label>
+                <input type="text" 
+                       id="ticket-search" 
+                       class="filter-select" 
+                       placeholder="Numéro ou service...">
+            </div>
+        </div>
+
+        <!-- Liste des tickets -->
+        <div class="tickets-list" id="tickets-list">
+            <!-- Les tickets seront chargés dynamiquement -->
+        </div>
+
+        <!-- Statistiques -->
+        <section class="stats-section">
+            <div class="container">
+                <h2 class="section-title" style="text-align: center; margin-bottom: 3rem;">Statistiques de vos tickets</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-ticket-alt"></i>
+                        </div>
+                        <div class="stat-number" id="total-tickets">0</div>
+                        <div class="stat-label">Tickets au total</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="stat-number" id="active-tickets">0</div>
+                        <div class="stat-label">Tickets actifs</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-money-bill-wave"></i>
+                        </div>
+                        <div class="stat-number" id="total-spent">0</div>
+                        <div class="stat-label">FCFA dépensés</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-hospital"></i>
+                        </div>
+                        <div class="stat-number" id="hospitals-count">0</div>
+                        <div class="stat-label">Hôpitaux visités</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal QR Code -->
+    <div class="qr-modal" id="qr-modal">
+        <div class="qr-modal-content">
+            <button class="btn btn-outline" style="position: absolute; top: 1rem; right: 1rem;" onclick="closeQRModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            
+            <div class="qr-info">
+                <div class="qr-number" id="qr-ticket-number">TICKET-123456</div>
+                <div class="qr-service" id="qr-ticket-service">Consultation Générale</div>
+            </div>
+            
+            <div class="qr-code" id="qr-code-display">
+                <i class="fas fa-qrcode"></i>
+            </div>
+            
+            <div class="ticket-grid" style="margin-top: 1.5rem;">
+                <div class="ticket-item">
+                    <span class="ticket-label">Validité</span>
+                    <span class="ticket-value" id="qr-validity">24h</span>
+                </div>
+                <div class="ticket-item">
+                    <span class="ticket-label">Prix</span>
+                    <span class="ticket-value" id="qr-price">5 000 FCFA</span>
+                </div>
+            </div>
+            
+            <div class="ticket-actions" style="border-top: none; padding-top: 1rem;">
+                <button class="btn btn-primary" onclick="printQRCode()">
+                    <i class="fas fa-print"></i> Imprimer
+                </button>
+                <button class="btn btn-outline" onclick="shareQRCode()">
+                    <i class="fas fa-share-alt"></i> Partager
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <a href="index.html" class="logo">
+                        <i class="fas fa-hospital-alt"></i>
+                        <span>Sama Health</span>
+                    </a>
+                    <p>Plateforme de digitalisation des hôpitaux publics pour éviter les files d'attente.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Navigation</h4>
+                    <ul>
+                        <li><a href="index.html">Accueil</a></li>
+                        <li><a href="hospitals.html">Établissements</a></li>
+                        <li><a href="specialties.html">Services</a></li>
+                        <!-- Mes rendez-vous removed for MVP navigation -->
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Compte</h4>
+                    <ul>
+                        <li><a href="login.html">Connexion</a></li>
+                        <li><a href="signup.html">Inscription</a></li>
+                        <li><a href="profile.html">Mon profil</a></li>
+                        <li><a href="tickets.html">Mes tickets</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Contact</h4>
+                    <ul>
+                        <li><i class="fas fa-envelope"></i> contact@samahealth.sn</li>
+                        <li><i class="fas fa-phone"></i> +221 33 123 45 67</li>
+                        <li><i class="fas fa-map-marker-alt"></i> Dakar, Sénégal</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 Sama Health. Tous droits réservés. <a href="privacy.html">Politique de confidentialité</a> | <a href="terms.html">Conditions d'utilisation</a></p>
+                <p class="pwa-info">
+                    <i class="fas fa-mobile-alt"></i> Application PWA disponible - Fonctionne hors ligne
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="hospitals-loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialiser l'application
+            if (typeof window.samaHealthApp === 'undefined') {
+                window.samaHealthApp = new SamaHealthApp();
+            }
+            
+            // Vérifier l'authentification
+            const authManager = window.samaHealthApp.authManager;
+            if (!authManager.isAuthenticated()) {
+                window.samaHealthApp.showNotification('Veuillez vous connecter pour accéder à vos tickets', 'error');
+                setTimeout(() => {
+                    window.location.href = 'login.html?redirect=tickets.html';
+                }, 2000);
+                return;
+            }
+            
+            // Charger les tickets
+            loadTickets();
+            
+            // Initialiser les événements
+            initEvents();
+            
+            // Mettre à jour le menu de navigation
+            updateNavMenu();
+            
+            // Gestion du menu responsive
+            const menuToggle = document.querySelector('.menu-toggle');
+            const navLinks = document.querySelector('.nav-links');
+            
+            if (menuToggle) {
+                menuToggle.addEventListener('click', function() {
+                    navLinks.classList.toggle('active');
+                });
+            }
+            
+            // Fermer le menu en cliquant sur un lien
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', () => {
+                    navLinks.classList.remove('active');
+                });
+            });
+        });
+
+        function updateNavMenu() {
+            const authLinks = document.querySelector('.auth-links');
+            if (authLinks) {
+                authLinks.innerHTML = `
+                    <a href="profile.html" class="btn btn-outline">
+                        <i class="fas fa-user"></i> Mon Profil
+                    </a>
+                    <button id="nav-logout-btn" class="btn btn-primary">
+                        <i class="fas fa-sign-out-alt"></i> Déconnexion
+                    </button>
+                `;
+                
+                document.getElementById('nav-logout-btn').addEventListener('click', function() {
+                    window.samaHealthApp.logout();
+                });
+            }
+        }
+
+        function loadTickets() {
+            const authManager = window.samaHealthApp.authManager;
+            const currentUser = authManager.currentUser;
+            const container = document.getElementById('tickets-list');
+            
+            // Récupérer les tickets depuis le localStorage
+            const tickets = JSON.parse(localStorage.getItem('tickets')) || [];
+            let userTickets = tickets.filter(ticket => 
+                ticket.userId === currentUser.id
+            );
+            
+            // Mettre à jour les statistiques
+            updateStats(userTickets);
+            
+            // Appliquer les filtres
+            userTickets = applyFilters(userTickets);
+            
+            if (userTickets.length === 0) {
+                container.innerHTML = `
+                    <div class="no-tickets">
+                        <div class="no-tickets-icon">
+                            <i class="fas fa-ticket-alt"></i>
+                        </div>
+                        <h3>Aucun ticket trouvé</h3>
+                        <p>Vous n'avez pas encore acheté de ticket ou aucun ticket ne correspond aux filtres.</p>
+                        <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 2rem;">
+                            <button class="btn btn-primary" onclick="buyTicket()">
+                                <i class="fas fa-ticket-alt"></i> Acheter un ticket
+                            </button>
+                            <button class="btn btn-outline" onclick="showAllTickets()">
+                                <i class="fas fa-list"></i> Voir tous les tickets
+                            </button>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = '';
+            
+            userTickets.forEach(ticket => {
+                const purchaseDate = new Date(ticket.purchaseDate);
+                const validUntil = new Date(ticket.validUntil);
+                const now = new Date();
+                
+                let status = 'active';
+                let statusClass = 'status-active';
+                let statusText = 'Actif';
+                
+                if (ticket.status === 'used') {
+                    status = 'used';
+                    statusClass = 'status-used';
+                    statusText = 'Utilisé';
+                } else if (ticket.status === 'expired' || validUntil < now) {
+                    status = 'expired';
+                    statusClass = 'status-expired';
+                    statusText = 'Expiré';
+                }
+                
+                const card = document.createElement('div');
+                card.className = 'ticket-card';
+                card.dataset.ticketId = ticket.id;
+                card.innerHTML = `
+                    <div class="ticket-header">
+                        <div class="ticket-info">
+                            <div class="ticket-qr-icon">
+                                <i class="fas fa-qrcode"></i>
+                            </div>
+                            <div class="ticket-details">
+                                <div class="ticket-number">${ticket.ticketNumber}</div>
+                                <div class="ticket-service">${ticket.service} • ${ticket.hospitalId ? 'Hôpital #' + ticket.hospitalId : 'Achat en ligne'}</div>
+                            </div>
+                        </div>
+                        <div class="ticket-status ${statusClass}">${statusText}</div>
+                    </div>
+                    <div class="ticket-content">
+                        <div class="ticket-grid">
+                            <div class="ticket-item">
+                                <span class="ticket-label">Date d'achat</span>
+                                <span class="ticket-value">${purchaseDate.toLocaleDateString('fr-FR')}</span>
+                            </div>
+                            <div class="ticket-item">
+                                <span class="ticket-label">Valide jusqu'au</span>
+                                <span class="ticket-value">${validUntil.toLocaleDateString('fr-FR')}</span>
+                            </div>
+                            <div class="ticket-item">
+                                <span class="ticket-label">Prix</span>
+                                <span class="ticket-value">${ticket.price || '0'} FCFA</span>
+                            </div>
+                            <div class="ticket-item">
+                                <span class="ticket-label">Méthode de paiement</span>
+                                <span class="ticket-value">${ticket.paymentMethod || 'Non spécifié'}</span>
+                            </div>
+                        </div>
+                        <div class="ticket-actions">
+                            <button class="btn btn-primary" onclick="showQRCode('${ticket.id}')">
+                                <i class="fas fa-qrcode"></i> Voir QR Code
+                            </button>
+                            ${status === 'active' ? `
+                                <button class="btn btn-outline" onclick="useTicket('${ticket.id}')">
+                                    <i class="fas fa-check"></i> Utiliser
+                                </button>
+                            ` : ''}
+                            <button class="btn btn-outline" onclick="downloadTicket('${ticket.id}')">
+                                <i class="fas fa-download"></i> Télécharger
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                container.appendChild(card);
+            });
+        }
+
+        function applyFilters(tickets) {
+            const statusFilter = document.getElementById('status-filter').value;
+            const sortFilter = document.getElementById('sort-filter').value;
+            const searchTerm = document.getElementById('ticket-search').value.toLowerCase();
+            
+            let filteredTickets = [...tickets];
+            
+            // Filtrer par statut
+            if (statusFilter !== 'all') {
+                const now = new Date();
+                filteredTickets = filteredTickets.filter(ticket => {
+                    const validUntil = new Date(ticket.validUntil);
+                    
+                    if (statusFilter === 'active') {
+                        return ticket.status === 'actif' && validUntil > now;
+                    } else if (statusFilter === 'used') {
+                        return ticket.status === 'utilisé';
+                    } else if (statusFilter === 'expired') {
+                        return ticket.status === 'expiré' || validUntil <= now;
+                    }
+                    return true;
+                });
+            }
+            
+            // Filtrer par recherche
+            if (searchTerm) {
+                filteredTickets = filteredTickets.filter(ticket =>
+                    ticket.ticketNumber.toLowerCase().includes(searchTerm) ||
+                    ticket.service.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            // Trier
+            filteredTickets.sort((a, b) => {
+                if (sortFilter === 'recent') {
+                    return new Date(b.purchaseDate) - new Date(a.purchaseDate);
+                } else if (sortFilter === 'oldest') {
+                    return new Date(a.purchaseDate) - new Date(b.purchaseDate);
+                } else if (sortFilter === 'price') {
+                    return (b.price || 0) - (a.price || 0);
+                }
+                return 0;
+            });
+            
+            return filteredTickets;
+        }
+
+        function updateStats(tickets) {
+            const now = new Date();
+            
+            const totalTickets = tickets.length;
+            const activeTickets = tickets.filter(ticket => {
+                const validUntil = new Date(ticket.validUntil);
+                return ticket.status === 'actif' && validUntil > now;
+            }).length;
+            
+            const totalSpent = tickets.reduce((sum, ticket) => sum + (ticket.price || 0), 0);
+            const hospitalsCount = new Set(tickets.map(t => t.hospitalId)).size;
+            
+            document.getElementById('total-tickets').textContent = totalTickets;
+            document.getElementById('active-tickets').textContent = activeTickets;
+            document.getElementById('total-spent').textContent = totalSpent.toLocaleString('fr-FR');
+            document.getElementById('hospitals-count').textContent = hospitalsCount;
+        }
+
+        function initEvents() {
+            // Filtres
+            document.getElementById('status-filter').addEventListener('change', () => loadTickets());
+            document.getElementById('sort-filter').addEventListener('change', () => loadTickets());
+            document.getElementById('ticket-search').addEventListener('input', () => loadTickets());
+        }
+
+        function buyTicket() {
+            window.location.href = 'hospitals.html';
+        }
+
+        function showAllTickets() {
+            document.getElementById('status-filter').value = 'all';
+            loadTickets();
+        }
+
+        function showActiveTickets() {
+            document.getElementById('status-filter').value = 'active';
+            loadTickets();
+        }
+
+        function showQRCode(ticketId) {
+            const tickets = JSON.parse(localStorage.getItem('tickets')) || [];
+            const ticket = tickets.find(t => t.id === ticketId);
+            
+            if (!ticket) return;
+            
+            document.getElementById('qr-ticket-number').textContent = ticket.ticketNumber;
+            document.getElementById('qr-ticket-service').textContent = ticket.service;
+            
+            // Calculer la validité restante
+            const validUntil = new Date(ticket.validUntil);
+            const now = new Date();
+            const diffHours = Math.floor((validUntil - now) / (1000 * 60 * 60));
+            
+            let validityText = 'Expiré';
+            if (diffHours > 0) {
+                if (diffHours > 24) {
+                    validityText = `${Math.floor(diffHours / 24)} jours`;
+                } else {
+                    validityText = `${diffHours} heures`;
+                }
+            }
+            
+            document.getElementById('qr-validity').textContent = validityText;
+            document.getElementById('qr-price').textContent = `${ticket.price || '0'} FCFA`;
+            
+            // Ouvrir le modal
+            document.getElementById('qr-modal').classList.add('active');
+        }
+
+        function closeQRModal() {
+            document.getElementById('qr-modal').classList.remove('active');
+        }
+
+        function printQRCode() {
+            window.print();
+        }
+
+        function shareQRCode() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Mon ticket Sama Health',
+                    text: 'Voici mon ticket médical pour Sama Health',
+                    url: window.location.href
+                });
+            } else {
+                window.samaHealthApp.showNotification('Le partage n\'est pas supporté sur cet appareil', 'error');
+            }
+        }
+
+        function useTicket(ticketId) {
+            if (confirm('Êtes-vous sûr de vouloir utiliser ce ticket ? Cette action est irréversible.')) {
+                const tickets = JSON.parse(localStorage.getItem('tickets')) || [];
+                const ticketIndex = tickets.findIndex(t => t.id === ticketId);
+                
+                if (ticketIndex !== -1) {
+                    tickets[ticketIndex].status = 'utilisé';
+                    tickets[ticketIndex].usedAt = new Date().toISOString();
+                    localStorage.setItem('tickets', JSON.stringify(tickets));
+                    
+                    window.samaHealthApp.showNotification('Ticket utilisé avec succès', 'success');
+                    loadTickets();
+                    closeQRModal();
+                }
+            }
+        }
+
+        function downloadTicket(ticketId) {
+            const tickets = JSON.parse(localStorage.getItem('tickets')) || [];
+            const ticket = tickets.find(t => t.id === ticketId);
+            
+            if (!ticket) return;
+            
+            // Créer un contenu HTML pour le ticket
+            const ticketContent = `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Ticket ${ticket.ticketNumber}</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; padding: 20px; }
+                        .ticket { border: 2px dashed #000; padding: 20px; max-width: 400px; margin: 0 auto; }
+                        .header { text-align: center; margin-bottom: 20px; }
+                        .qr { text-align: center; margin: 20px 0; }
+                        .info { margin-bottom: 10px; }
+                        .label { font-weight: bold; }
+                    </style>
+                </head>
+                <body>
+                    <div class="ticket">
+                        <div class="header">
+                            <h2>Sama Health</h2>
+                            <h3>${ticket.ticketNumber}</h3>
+                        </div>
+                        <div class="qr">
+                            <div style="font-size: 48px;">[QR Code]</div>
+                            <p>Présentez ce code à l'accueil</p>
+                        </div>
+                        <div class="info">
+                            <span class="label">Service :</span> ${ticket.service}
+                        </div>
+                        <div class="info">
+                            <span class="label">Date d'achat :</span> ${new Date(ticket.purchaseDate).toLocaleDateString('fr-FR')}
+                        </div>
+                        <div class="info">
+                            <span class="label">Valide jusqu'au :</span> ${new Date(ticket.validUntil).toLocaleDateString('fr-FR')}
+                        </div>
+                        <div class="info">
+                            <span class="label">Prix :</span> ${ticket.price || '0'} FCFA
+                        </div>
+                    </div>
+                </body>
+                </html>
+            `;
+            
+            // Créer un blob et un lien de téléchargement
+            const blob = new Blob([ticketContent], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `ticket-${ticket.ticketNumber}.html`;
+            a.click();
+            
+            window.samaHealthApp.showNotification('Ticket téléchargé avec succès', 'success');
+        }
+    </script>
+</body>
+</html>
+        
+.qr-code {
+            width: 200px;
+            height: 200px;
+            background: #f0f0f0;
+            border-radius: var(--radius);
+            display: flex; 
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            margin: 0 auto 1.5rem;
+        }
+</body>
+</html>

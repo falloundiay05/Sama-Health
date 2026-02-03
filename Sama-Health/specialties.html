@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Services & Spécialités - Sama Health</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Page Spécifique - Services */
+        .page-header {
+            background: linear-gradient(135deg, #f0f7ff 0%, #e6f2ff 100%);
+            padding: 4rem 0;
+            margin-bottom: 3rem;
+        }
+        
+        .page-header-content {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .page-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+        
+        .page-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            margin-bottom: 2rem;
+        }
+        
+        /* Catégories de services */
+        .services-categories {
+            margin-bottom: 3rem;
+        }
+        
+        .categories-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+        
+        .category-btn {
+            padding: 12px 24px;
+            background: white;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius);
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .category-btn:hover,
+        .category-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        /* Grille des services */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .service-card {
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 2rem;
+            text-align: center;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .service-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(52, 168, 83, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            color: var(--secondary-color);
+            font-size: 2rem;
+        }
+        
+        .service-title {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+        
+        .service-description {
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+        
+        .service-stats {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-lighter);
+        }
+        
+        /* Section d'information */
+        .info-section {
+            background: var(--bg-light);
+            padding: 4rem 0;
+            margin-top: 3rem;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+            align-items: center;
+        }
+        
+        .info-content h2 {
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+        }
+        
+        .info-content p {
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+        
+        .info-image {
+            text-align: center;
+        }
+        
+        .info-image img {
+            max-width: 100%;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .categories-nav {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .category-btn {
+                justify-content: center;
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <img src="images/logo.png" alt="Sama Health" class="navbar-logo">
+                <span>Sama Health</span>
+            </a>
+            <button class="menu-toggle" aria-label="Menu">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="nav-links">
+                <a href="index.html"><i class="fas fa-home"></i> Accueil</a>
+                <a href="hospitals.html"><i class="fas fa-hospital"></i> Établissements</a>
+                <a href="specialties.html" class="active"><i class="fas fa-user-md"></i> Services</a>
+                <div class="auth-links">
+                    <a href="login.html" class="btn btn-primary"><i class="fas fa-sign-in-alt"></i> Connexion</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- En-tête de page -->
+    <header class="page-header">
+        <div class="container">
+            <div class="page-header-content">
+                <h1 class="page-title">Services & Spécialités Médicales</h1>
+                <p class="page-subtitle">Découvrez tous les services médicaux disponibles dans nos établissements partenaires</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Contenu principal -->
+    <main class="container">
+        <!-- Catégories de services -->
+        <section class="services-categories">
+            <div class="categories-nav" id="categories-nav">
+                <!-- Les catégories seront chargées dynamiquement -->
+            </div>
+
+            <!-- Grille des services -->
+            <div class="services-grid" id="services-container">
+                <!-- Les services seront chargés dynamiquement -->
+            </div>
+        </section>
+
+        <!-- Section d'information -->
+        <section class="info-section">
+            <div class="container">
+                <div class="info-grid">
+                    <div class="info-content">
+                        <h2>Comment choisir le bon service médical ?</h2>
+                        <p>Sama Health vous guide dans le choix du service médical adapté à vos besoins. Notre plateforme vous permet de trouver rapidement le spécialiste ou le service dont vous avez besoin.</p>
+                        <p>Tous nos établissements partenaires sont vérifiés et offrent des soins de qualité. Vous pouvez consulter les avis, les temps d'attente et les disponibilités en temps réel.</p>
+                        <a href="hospitals.html" class="btn btn-primary">
+                            <i class="fas fa-search"></i> Trouver un établissement
+                        </a>
+                    </div>
+                    <div class="info-image">
+                        <img src="https://images.unsplash.com/photo-1586773860418-dc22f8b874bc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Services médicaux">
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <a href="index.html" class="logo">
+                        <i class="fas fa-hospital-alt"></i>
+                        <span>Sama Health</span>
+                    </a>
+                    <p>Plateforme de digitalisation des hôpitaux publics pour éviter les files d'attente.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Navigation</h4>
+                    <ul>
+                        <li><a href="index.html">Accueil</a></li>
+                        <li><a href="hospitals.html">Établissements</a></li>
+                        <li><a href="specialties.html">Services</a></li>
+                        <!-- Mes rendez-vous removed for MVP navigation -->
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Compte</h4>
+                    <ul>
+                        <li><a href="login.html">Connexion</a></li>
+                        <li><a href="profile.html">Mon profil</a></li>
+                        <li><a href="tickets.html">Mes tickets</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Contact</h4>
+                    <ul>
+                        <li><i class="fas fa-envelope"></i> contact@samahealth.sn</li>
+                        <li><i class="fas fa-phone"></i> +221 33 123 45 67</li>
+                        <li><i class="fas fa-map-marker-alt"></i> Dakar, Sénégal</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 Sama Health. Tous droits réservés. <a href="privacy.html">Politique de confidentialité</a> | <a href="terms.html">Conditions d'utilisation</a></p>
+                <p class="pwa-info">
+                    <i class="fas fa-mobile-alt"></i> Application PWA disponible - Fonctionne hors ligne
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialiser l'application
+            if (typeof window.samaHealthApp === 'undefined') {
+                window.samaHealthApp = new SamaHealthApp();
+            }
+            
+            // Données des services
+            const services = [
+                {
+                    id: 1,
+                    name: "Consultation Générale",
+                    description: "Consultation médicale générale pour le diagnostic et le traitement des maladies courantes.",
+                    icon: "fas fa-stethoscope",
+                    category: "consultation",
+                    hospitalsCount: 45,
+                    avgWaitTime: 30
+                },
+                {
+                    id: 2,
+                    name: "Urgences",
+                    description: "Service d'urgence médicale 24h/24 pour les cas nécessitant une intervention immédiate.",
+                    icon: "fas fa-ambulance",
+                    category: "urgence",
+                    hospitalsCount: 28,
+                    avgWaitTime: 45
+                },
+                {
+                    id: 3,
+                    name: "Pédiatrie",
+                    description: "Soins médicaux spécialisés pour les enfants, de la naissance à l'adolescence.",
+                    icon: "fas fa-baby",
+                    category: "specialite",
+                    hospitalsCount: 32,
+                    avgWaitTime: 25
+                },
+                {
+                    id: 4,
+                    name: "Radiologie",
+                    description: "Examens d'imagerie médicale : radiographies, scanners, IRM, échographies.",
+                    icon: "fas fa-x-ray",
+                    category: "diagnostic",
+                    hospitalsCount: 25,
+                    avgWaitTime: 40
+                },
+                {
+                    id: 5,
+                    name: "Laboratoire d'Analyses",
+                    description: "Analyses sanguines, urinaires et autres examens de laboratoire médical.",
+                    icon: "fas fa-flask",
+                    category: "diagnostic",
+                    hospitalsCount: 38,
+                    avgWaitTime: 20
+                },
+                {
+                    id: 6,
+                    name: "Pharmacie",
+                    description: "Délivrance des médicaments prescrits et conseils pharmaceutiques.",
+                    icon: "fas fa-pills",
+                    category: "pharmacie",
+                    hospitalsCount: 42,
+                    avgWaitTime: 15
+                },
+                {
+                    id: 7,
+                    name: "Dentiste",
+                    description: "Soins dentaires, détartrage, caries, extractions et prothèses dentaires.",
+                    icon: "fas fa-tooth",
+                    category: "specialite",
+                    hospitalsCount: 28,
+                    avgWaitTime: 35
+                },
+                {
+                    id: 8,
+                    name: "Ophtalmologie",
+                    description: "Examens de la vue, prescriptions de lunettes et traitement des maladies oculaires.",
+                    icon: "fas fa-eye",
+                    category: "specialite",
+                    hospitalsCount: 21,
+                    avgWaitTime: 40
+                },
+                {
+                    id: 9,
+                    name: "Cardiologie",
+                    description: "Diagnostic et traitement des maladies du cœur et des vaisseaux sanguins.",
+                    icon: "fas fa-heart",
+                    category: "specialite",
+                    hospitalsCount: 18,
+                    avgWaitTime: 50
+                },
+                {
+                    id: 10,
+                    name: "Gynécologie",
+                    description: "Soins de santé féminine, suivi gynécologique et planning familial.",
+                    icon: "fas fa-female",
+                    category: "specialite",
+                    hospitalsCount: 26,
+                    avgWaitTime: 30
+                },
+                {
+                    id: 11,
+                    name: "Dermatologie",
+                    description: "Diagnostic et traitement des maladies de la peau, des cheveux et des ongles.",
+                    icon: "fas fa-allergies",
+                    category: "specialite",
+                    hospitalsCount: 19,
+                    avgWaitTime: 45
+                },
+                {
+                    id: 12,
+                    name: "Kinésithérapie",
+                    description: "Rééducation fonctionnelle et traitement des troubles musculo-squelettiques.",
+                    icon: "fas fa-hand-holding-heart",
+                    category: "therapie",
+                    hospitalsCount: 23,
+                    avgWaitTime: 25
+                }
+            ];
+            
+            // Catégories
+            const categories = [
+                { id: 'all', name: 'Tous les services', icon: 'fas fa-th' },
+                { id: 'consultation', name: 'Consultations', icon: 'fas fa-stethoscope' },
+                { id: 'urgence', name: 'Urgences', icon: 'fas fa-ambulance' },
+                { id: 'specialite', name: 'Spécialités', icon: 'fas fa-user-md' },
+                { id: 'diagnostic', name: 'Diagnostics', icon: 'fas fa-microscope' },
+                { id: 'pharmacie', name: 'Pharmacie', icon: 'fas fa-pills' },
+                { id: 'therapie', name: 'Thérapies', icon: 'fas fa-hand-holding-heart' }
+            ];
+            
+            // Charger les catégories
+            const categoriesNav = document.getElementById('categories-nav');
+            categories.forEach(category => {
+                const button = document.createElement('button');
+                button.className = 'category-btn';
+                if (category.id === 'all') button.classList.add('active');
+                button.setAttribute('data-category', category.id);
+                button.innerHTML = `
+                    <i class="${category.icon}"></i>
+                    ${category.name}
+                `;
+                categoriesNav.appendChild(button);
+            });
+            
+            // Charger tous les services initialement
+            loadServices('all');
+            
+            // Gestionnaires d'événements pour les catégories
+            document.querySelectorAll('.category-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    // Retirer la classe active de tous les boutons
+                    document.querySelectorAll('.category-btn').forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    
+                    // Activer le bouton cliqué
+                    this.classList.add('active');
+                    
+                    // Charger les services de la catégorie
+                    const category = this.getAttribute('data-category');
+                    loadServices(category);
+                });
+            });
+            
+            function loadServices(categoryId) {
+                const container = document.getElementById('services-container');
+                container.innerHTML = '';
+                
+                let filteredServices = services;
+                if (categoryId !== 'all') {
+                    filteredServices = services.filter(service => service.category === categoryId);
+                }
+                
+                filteredServices.forEach(service => {
+                    const card = document.createElement('div');
+                    card.className = 'service-card';
+                    card.innerHTML = `
+                        <div class="service-icon">
+                            <i class="${service.icon}"></i>
+                        </div>
+                        <h3 class="service-title">${service.name}</h3>
+                        <p class="service-description">${service.description}</p>
+                        <div class="service-stats">
+                            <div class="stat-item">
+                                <div class="stat-number">${service.hospitalsCount}</div>
+                                <div class="stat-label">Établissements</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">${service.avgWaitTime}</div>
+                                <div class="stat-label">min d'attente</div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    // Ajouter un événement de clic pour rediriger vers les hôpitaux avec ce service
+                    card.addEventListener('click', function() {
+                        window.location.href = `hospitals.html?service=${encodeURIComponent(service.name)}`;
+                    });
+                    
+                    container.appendChild(card);
+                });
+            }
+            
+            // Gestion du menu responsive
+            const menuToggle = document.querySelector('.menu-toggle');
+            const navLinks = document.querySelector('.nav-links');
+            
+            if (menuToggle) {
+                menuToggle.addEventListener('click', function() {
+                    navLinks.classList.toggle('active');
+                });
+            }
+            
+            // Fermer le menu en cliquant sur un lien
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', () => {
+                    navLinks.classList.remove('active');
+                });
+            });
+            
+            // Vérifier l'authentification
+            window.samaHealthApp.checkAuth();
+            
+            // Gérer le paramètre de service dans l'URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const serviceParam = urlParams.get('service');
+            
+            if (serviceParam) {
+                // Trouver la catégorie du service
+                const service = services.find(s => s.name === serviceParam);
+                if (service) {
+                    // Activer la catégorie correspondante
+                    const categoryBtn = document.querySelector(`[data-category="${service.category}"]`);
+                    if (categoryBtn) {
+                        categoryBtn.click();
+                        
+                        // Faire défiler jusqu'à la carte du service
+                        setTimeout(() => {
+                            const serviceCard = Array.from(document.querySelectorAll('.service-card')).find(card => 
+                                card.querySelector('.service-title').textContent === serviceParam
+                            );
+                            if (serviceCard) {
+                                serviceCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                serviceCard.style.boxShadow = '0 0 0 3px var(--primary-color)';
+                                setTimeout(() => {
+                                    serviceCard.style.boxShadow = '';
+                                }, 3000);
+                            }
+                        }, 500);
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détails de l'hôpital - Sama Health</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Styles spécifiques pour les détails d'hôpital */
+        .hospital-details-container {
+            max-width: 1200px;
+            margin: 100px auto 50px;
+            padding: 0 20px;
+        }
+        
+        .hospital-header {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .hospital-gallery {
+            height: 400px;
+            position: relative;
+        }
+        
+        .hospital-main-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .hospital-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--secondary-color);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .hospital-info {
+            padding: 40px;
+        }
+        
+        .hospital-title-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 30px;
+        }
+        
+        .hospital-name {
+            font-size: 32px;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+        
+        .hospital-rating {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .stars {
+            color: #FFD700;
+        }
+        
+        .rating-number {
+            font-weight: 600;
+            color: var(--text-color);
+        }
+        
+        .rating-count {
+            color: var(--text-light);
+            font-size: 14px;
+        }
+        
+        .hospital-actions {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .hospital-meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .meta-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+        
+        .meta-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--bg-light);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+            font-size: 20px;
+        }
+        
+        .meta-content h4 {
+            font-size: 16px;
+            margin-bottom: 5px;
+            color: var(--text-color);
+        }
+        
+        .meta-content p {
+            color: var(--text-light);
+            font-size: 14px;
+        }
+        
+        /* Section services */
+        .hospital-services {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .section-title {
+            font-size: 24px;
+            color: var(--primary-color);
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .service-item {
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 25px;
+            transition: all 0.3s ease;
+        }
+        
+        .service-item:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .service-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+        
+        .service-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        
+        .service-price {
+            background: var(--secondary-color);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .service-details {
+            margin-bottom: 20px;
+        }
+        
+        .service-detail {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        .detail-label {
+            color: var(--text-light);
+        }
+        
+        .detail-value {
+            font-weight: 500;
+        }
+        
+        /* Section horaires */
+        .opening-hours {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .hours-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .day-schedule {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .day-schedule:last-child {
+            border-bottom: none;
+        }
+        
+        .day-name {
+            font-weight: 500;
+            color: var(--text-color);
+        }
+        
+        .day-hours {
+            color: var(--text-light);
+        }
+        
+        .day-hours.closed {
+            color: var(--accent-color);
+        }
+        
+        /* Reviews section removed for prototype */
+        
+        .review-date {
+            color: var(--text-light);
+            font-size: 14px;
+        }
+        
+        .review-rating {
+            color: #FFD700;
+        }
+        
+        .review-content {
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        
+        /* Floating action buttons */
+        .floating-actions {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 100;
+        }
+        
+        .floating-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(42, 110, 143, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .floating-btn:hover {
+            transform: scale(1.1);
+            background: var(--primary-dark);
+        }
+        
+        .floating-btn.secondary {
+            background: var(--secondary-color);
+        }
+        
+        .btn-label {
+            position: absolute;
+            right: 70px;
+            background: white;
+            padding: 8px 15px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 500;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+        
+        .floating-btn:hover .btn-label {
+            opacity: 1;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hospital-details-container {
+                margin: 80px auto 30px;
+                padding: 0 15px;
+            }
+            
+            .hospital-gallery {
+                height: 250px;
+            }
+            
+            .hospital-info {
+                padding: 25px;
+            }
+            
+            .hospital-title-section {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .hospital-name {
+                font-size: 24px;
+            }
+            
+            .floating-actions {
+                bottom: 20px;
+                right: 20px;
+            }
+            
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .reviews-header {
+                flex-direction: column;
+                gap: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <img src="images/logo.png" alt="Sama Health" class="navbar-logo">
+                <span>Sama Health</span>
+            </a>
+            <button class="menu-toggle" aria-label="Menu">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="nav-links">
+                <a href="index.html"><i class="fas fa-home"></i> Accueil</a>
+                <a href="hospitals.html"><i class="fas fa-hospital"></i> Établissements</a>
+                <a href="specialties.html"><i class="fas fa-user-md"></i> Services</a>
+                <div class="auth-links">
+                    <a href="login.html" class="btn btn-primary"><i class="fas fa-sign-in-alt"></i> Connexion</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Détails de l'hôpital -->
+    <main class="hospital-details-container">
+        <!-- En-tête de l'hôpital -->
+        <div class="hospital-header">
+            <div class="hospital-gallery">
+                <img src="images/hospitals/hopital1.jpg" 
+                    alt="Hôpital Principal de Dakar" 
+                     class="hospital-main-image"
+                    id="main-hospital-image">
+                <div class="hospital-badge">PUBLIC</div>
+            </div>
+            
+            
+            <div class="hospital-info">
+                <div class="hospital-title-section">
+                    <div>
+                        <h1 class="hospital-name" id="hospital-name">Hôpital Principal de Dakar</h1>
+                        <div class="hospital-rating">
+                            <div class="stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                            <span class="rating-number">4.2</span>
+                            <span class="rating-count">(128 avis)</span>
+                        </div>
+                        <p id="hospital-address" style="color: var(--text-light);">
+                            <i class="fas fa-map-marker-alt"></i> Avenue Nelson Mandela, Dakar, Sénégal
+                        </p>
+                    </div>
+                    
+                    <div class="hospital-actions">
+                        <button class="btn btn-primary" id="book-appointment-btn">
+                            <i class="fas fa-calendar-check"></i> Prendre RDV
+                        </button>
+                        <button class="btn btn-outline" id="buy-ticket-btn">
+                            <i class="fas fa-ticket-alt"></i> Acheter Ticket
+                        </button>
+                        <button class="btn btn-outline" id="share-btn">
+                            <i class="fas fa-share-alt"></i> Partager
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="hospital-meta">
+                    <div class="meta-item">
+                        <div class="meta-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div class="meta-content">
+                            <h4>Téléphone</h4>
+                            <p id="hospital-phone">+221 33 839 50 50</p>
+                        </div>
+                    </div>
+                    
+                    <div class="meta-item">
+                        <div class="meta-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="meta-content">
+                            <h4>Temps d'attente</h4>
+                            <p id="hospital-wait-time">~45 minutes</p>
+                        </div>
+                    </div>
+                    
+                    <div class="meta-item">
+                        <div class="meta-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="meta-content">
+                            <h4>Capacité</h4>
+                            <p id="hospital-capacity">500 lits disponibles</p>
+                        </div>
+                    </div>
+                    
+                    <div class="meta-item">
+                        <div class="meta-icon">
+                            <i class="fas fa-car"></i>
+                        </div>
+                        <div class="meta-content">
+                            <h4>Parking</h4>
+                            <p id="hospital-parking">Parking gratuit disponible</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="hospital-description">
+                    <h3 style="margin-bottom: 15px; color: var(--primary-color);">Description</h3>
+                    <p id="hospital-description" style="line-height: 1.6; color: var(--text-color);">
+                        L'Hôpital Principal de Dakar est l'établissement de santé publique le plus important de la capitale. 
+                        Fondé en 1955, il offre une large gamme de services médicaux allant des consultations générales 
+                        aux spécialités pointues. L'hôpital dispose d'équipements modernes et d'une équipe médicale 
+                        hautement qualifiée. Centre de référence pour de nombreuses spécialités, il accueille des patients 
+                        de tout le Sénégal et de la sous-région.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Services disponibles -->
+        <section class="hospital-services">
+            <h2 class="section-title">
+                <i class="fas fa-stethoscope"></i> Services Disponibles
+            </h2>
+            
+            <div class="services-grid" id="services-list">
+                <!-- Services chargés dynamiquement -->
+            </div>
+        </section>
+
+        <!-- Horaires d'ouverture -->
+        <section class="opening-hours">
+            <h2 class="section-title">
+                <i class="fas fa-clock"></i> Horaires d'Ouverture
+            </h2>
+            
+            <div class="hours-grid" id="opening-hours">
+                <!-- Horaires chargés dynamiquement -->
+            </div>
+        </section>
+
+        <!-- Avis et évaluations -->
+        <section class="reviews-section">
+            <div class="reviews-header">
+                <h2 class="section-title" style="margin: 0;">
+                    <i class="fas fa-comment-medical"></i> Avis des Patients
+                </h2>
+                
+                <div class="average-rating">
+                    <div class="average-score">4.2</div>
+                    <div class="average-stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                    <div class="total-reviews">128 avis</div>
+                </div>
+            </div>
+            
+            <div class="reviews-list" id="reviews-list">
+                <!-- Avis chargés dynamiquement -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Floating action buttons -->
+    <div class="floating-actions">
+        <button class="floating-btn" id="quick-appointment-btn" title="RDV rapide">
+            <i class="fas fa-calendar-plus"></i>
+            <span class="btn-label">RDV Rapide</span>
+        </button>
+        <button class="floating-btn secondary" id="emergency-btn" title="Urgences">
+            <i class="fas fa-ambulance"></i>
+            <span class="btn-label">Urgences</span>
+        </button>
+        <button class="floating-btn" id="call-btn" title="Appeler">
+            <i class="fas fa-phone"></i>
+            <span class="btn-label">Appeler</span>
+        </button>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <a href="index.html" class="logo">
+                        <i class="fas fa-hospital-alt"></i>
+                        <span>Sama Health</span>
+                    </a>
+                    <p>Plateforme de digitalisation des hôpitaux publics pour éviter les files d'attente.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Navigation</h4>
+                    <ul>
+                        <li><a href="index.html">Accueil</a></li>
+                        <li><a href="hospitals.html">Établissements</a></li>
+                        <li><a href="specialties.html">Services</a></li>
+                        <!-- Mes rendez-vous removed for MVP navigation -->
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Compte</h4>
+                    <ul>
+                        <li><a href="login.html">Connexion</a></li>
+                        <li><a href="profile.html">Mon profil</a></li>
+                        <li><a href="tickets.html">Mes tickets</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Contact</h4>
+                    <ul>
+                        <li><i class="fas fa-envelope"></i> contact@samahealth.sn</li>
+                        <li><i class="fas fa-phone"></i> +221 33 123 45 67</li>
+                        <li><i class="fas fa-map-marker-alt"></i> Dakar, Sénégal</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 Sama Health. Tous droits réservés. <a href="privacy.html">Politique de confidentialité</a> | <a href="terms.html">Conditions d'utilisation</a></p>
+                <p class="pwa-info">
+                    <i class="fas fa-mobile-alt"></i> Application PWA disponible - Fonctionne hors ligne
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Récupérer l'ID de l'hôpital depuis l'URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const hospitalId = urlParams.get('id') || 1;
+            
+            // Charger les données de l'hôpital
+            loadHospitalData(hospitalId);
+            
+            // Initialiser les événements
+            initEventHandlers();
+            
+            // Gestion du menu responsive
+            initResponsiveMenu();
+        });
+        
+        function loadHospitalData(hospitalId) {
+            // Données de test pour les hôpitaux
+            const hospitals = [
+                {
+                    id: 1,
+                    name: "Hôpital Principal de Dakar",
+                    address: "Avenue Nelson Mandela, Dakar, Sénégal",
+                    phone: "+221 33 839 50 50",
+                    services: ["Consultation Générale", "Urgences", "Radiologie", "Laboratoire"],
+                    description: "L'Hôpital Principal de Dakar est l'établissement de santé publique le plus important de la capitale. Fondé en 1955, il offre une large gamme de services médicaux allant des consultations générales aux spécialités pointues.",
+                    type: "Hôpital Public",
+                    waitingTime: 45,
+                    rating: 4.2,
+                    image: "images/hospitals/hopital1.jpg",
+                    openingHours: {
+                        monday: "08:00 - 18:00",
+                        tuesday: "08:00 - 18:00",
+                        wednesday: "08:00 - 18:00",
+                        thursday: "08:00 - 18:00",
+                        friday: "08:00 - 17:00",
+                        saturday: "09:00 - 13:00",
+                        sunday: "Urgences uniquement"
+                    }
+                },
+                {
+                    id: 2,
+                    name: "Centre Hospitalier Universitaire de Fann",
+                    address: "Route des Almadies, Dakar",
+                    phone: "+221 33 869 10 10",
+                    services: ["Consultation Générale", "Pédiatrie", "Cardiologie", "Ophtalmologie", "Dermatologie"],
+                    description: "Centre hospitalier universitaire spécialisé dans la recherche et les soins avancés.",
+                    type: "CHU",
+                    waitingTime: 60,
+                    rating: 4.5,
+                    image: "images/hospitals/hopital2.jpg",
+                    openingHours: {
+                        monday: "07:30 - 19:00",
+                        tuesday: "07:30 - 19:00",
+                        wednesday: "07:30 - 19:00",
+                        thursday: "07:30 - 19:00",
+                        friday: "07:30 - 18:00",
+                        saturday: "08:00 - 14:00",
+                        sunday: "Urgences uniquement"
+                    }
+                }
+            ];
+            
+            // Services disponibles avec prix
+            const allServices = [
+                { id: 1, name: "Consultation Générale", price: "2000", duration: "30 min" },
+                { id: 2, name: "Urgences", price: "5000", duration: "Variable" },
+                { id: 3, name: "Radiologie", price: "15000", duration: "45 min" },
+                { id: 4, name: "Laboratoire", price: "10000", duration: "20 min" },
+                { id: 5, name: "Pédiatrie", price: "2500", duration: "30 min" },
+                { id: 6, name: "Cardiologie", price: "8000", duration: "45 min" },
+                { id: 7, name: "Ophtalmologie", price: "3000", duration: "30 min" },
+                { id: 8, name: "Dermatologie", price: "3500", duration: "30 min" }
+            ];
+            
+            // Trouver l'hôpital par ID
+            const hospital = hospitals.find(h => h.id == hospitalId);
+            
+            if (!hospital) {
+                // Hôpital non trouvé, rediriger vers la liste
+                window.location.href = 'hospitals.html';
+                return;
+            }
+            
+            // Mettre à jour l'interface avec les données
+            updateHospitalUI(hospital, allServices);
+        }
+        
+        function updateHospitalUI(hospital, allServices) {
+            // Mettre à jour toutes les informations
+            document.getElementById('hospital-name').textContent = hospital.name;
+            document.getElementById('hospital-address').innerHTML = `<i class="fas fa-map-marker-alt"></i> ${hospital.address}`;
+            document.getElementById('hospital-phone').textContent = hospital.phone;
+            document.getElementById('hospital-wait-time').textContent = `~${hospital.waitingTime} minutes`;
+            document.getElementById('hospital-description').textContent = hospital.description;
+            document.getElementById('hospital-capacity').textContent = "500 lits disponibles";
+            document.getElementById('hospital-parking').textContent = "Parking gratuit disponible";
+            
+            // Mettre à jour l'image
+            const mainImage = document.getElementById('main-hospital-image');
+            if (mainImage) {
+                mainImage.src = hospital.image;
+                mainImage.alt = hospital.name;
+            }
+            
+            // Mettre à jour le badge
+            const badge = document.querySelector('.hospital-badge');
+            badge.textContent = hospital.type;
+            
+            // Charger les services
+            loadServices(hospital.services, allServices);
+            
+            // Charger les horaires
+            loadOpeningHours(hospital.openingHours);
+            
+            // Reviews loading removed for prototype
+        }
+        
+        function loadServices(hospitalServices, allServices) {
+            const servicesList = document.getElementById('services-list');
+            
+            servicesList.innerHTML = hospitalServices.map(serviceName => {
+                const service = allServices.find(s => s.name === serviceName);
+                if (!service) return '';
+                
+                return `
+                    <div class="service-item">
+                        <div class="service-header">
+                            <div class="service-name">${service.name}</div>
+                            <div class="service-price">${service.price} FCFA</div>
+                        </div>
+                        <div class="service-details">
+                            <div class="service-detail">
+                                <span class="detail-label">Durée :</span>
+                                <span class="detail-value">${service.duration}</span>
+                            </div>
+                            <div class="service-detail">
+                                <span class="detail-label">Disponibilité :</span>
+                                <span class="detail-value">Disponible</span>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 10px; margin-top: 15px;">
+                            <button class="btn btn-primary" style="flex: 1; padding: 10px;" 
+                                    onclick="bookService('${service.id}', '${service.price}')">
+                                <i class="fas fa-calendar-check"></i> Réserver
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function loadOpeningHours(openingHours) {
+            const hoursGrid = document.getElementById('opening-hours');
+            const days = [
+                { name: 'Lundi', key: 'monday' },
+                { name: 'Mardi', key: 'tuesday' },
+                { name: 'Mercredi', key: 'wednesday' },
+                { name: 'Jeudi', key: 'thursday' },
+                { name: 'Vendredi', key: 'friday' },
+                { name: 'Samedi', key: 'saturday' },
+                { name: 'Dimanche', key: 'sunday' }
+            ];
+            
+            hoursGrid.innerHTML = days.map(day => {
+                const hours = openingHours[day.key];
+                return `
+                    <div class="day-schedule">
+                        <span class="day-name">${day.name}</span>
+                        <span class="day-hours ${hours.includes('Urgences') ? 'closed' : ''}">
+                            ${hours}
+                        </span>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        // Reviews removed for prototype
+        
+        function initEventHandlers() {
+                    date: "5 Nov 2023",
+                    rating: 4,
+                    content: "Service efficace, mais un peu d'attente aux urgences. Dans l'ensemble, satisfait de la consultation."
+                }
+            ];
+            
+            reviewsList.innerHTML = reviews.map(review => `
+                <div class="review-item">
+                    <div class="review-header">
+                        <div class="reviewer-info">
+                            <div class="reviewer-avatar">${review.name.charAt(0)}</div>
+                            <div>
+                                <div class="reviewer-name">${review.name}</div>
+                                <div class="review-date">${review.date}</div>
+                            </div>
+                        </div>
+                        <div class="review-rating">
+                            ${'<i class="fas fa-star"></i>'.repeat(review.rating)}
+                        </div>
+                    </div>
+                    <div class="review-content">${review.content}</div>
+                </div>
+            `).join('');
+        }
+        
+        function initEventHandlers() {
+            // Bouton Prendre RDV
+            document.getElementById('book-appointment-btn').addEventListener('click', function() {
+                const hospitalName = document.getElementById('hospital-name').textContent;
+                sessionStorage.setItem('selectedHospital', hospitalName);
+                window.location.href = 'appointment.html';
+            });
+            
+            // Bouton Acheter Ticket
+            document.getElementById('buy-ticket-btn').addEventListener('click', function() {
+                window.samaHealthApp.showNotification('Fonctionnalité à venir bientôt!', 'info');
+            });
+            
+            // Bouton Partager
+            document.getElementById('share-btn').addEventListener('click', function() {
+                if (navigator.share) {
+                    navigator.share({
+                        title: document.getElementById('hospital-name').textContent,
+                        text: 'Découvrez cet hôpital sur Sama Health',
+                        url: window.location.href
+                    });
+                } else {
+                    navigator.clipboard.writeText(window.location.href);
+                    window.samaHealthApp.showNotification('Lien copié dans le presse-papier!', 'success');
+                }
+            });
+            
+            // Bouton RDV rapide (floating)
+            document.getElementById('quick-appointment-btn').addEventListener('click', function() {
+                window.location.href = 'appointment.html';
+            });
+            
+            // Bouton Urgences (floating)
+            document.getElementById('emergency-btn').addEventListener('click', function() {
+                window.location.href = 'appointment.html?type=urgence';
+            });
+            
+            // Bouton Appeler (floating)
+            document.getElementById('call-btn').addEventListener('click', function() {
+                const phoneNumber = document.getElementById('hospital-phone').textContent;
+                window.location.href = `tel:${phoneNumber}`;
+            });
+        }
+        
+        function initResponsiveMenu() {
+            const menuToggle = document.querySelector('.menu-toggle');
+            const navLinks = document.querySelector('.nav-links');
+            
+            if (menuToggle) {
+                menuToggle.addEventListener('click', function() {
+                    navLinks.classList.toggle('active');
+                });
+            }
+            
+            // Fermer le menu en cliquant sur un lien
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', () => {
+                    navLinks.classList.remove('active');
+                });
+            });
+        }
+        
+        function bookService(serviceId, price) {
+            const hospitalName = document.getElementById('hospital-name').textContent;
+            
+            // Stocker les données pour la page de rendez-vous
+            sessionStorage.setItem('bookingData', JSON.stringify({
+                hospitalName: hospitalName,
+                serviceId: serviceId,
+                price: price
+            }));
+            
+            // Rediriger vers la page de rendez-vous
+            window.location.href = 'appointment.html';
+        }
+    </script>
+</body>
+</html>

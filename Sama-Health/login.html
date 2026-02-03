@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion - Sama Health</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .auth-page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #f0f7ff 0%, #e6f2ff 100%);
+            padding: 2rem;
+        }
+        
+        .auth-container {
+            width: 100%;
+            max-width: 450px;
+        }
+        
+        .auth-card {
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            padding: 2.5rem;
+        }
+        
+        .auth-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .auth-header .logo {
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+        
+        .auth-header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .auth-header p {
+            color: var(--text-lighter);
+        }
+        
+        .auth-form {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            transition: var(--transition);
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(42, 110, 143, 0.1);
+        }
+        
+        .input-with-icon {
+            position: relative;
+        }
+        
+        .input-with-icon i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-lighter);
+        }
+        
+        .input-with-icon .form-control {
+            padding-left: 45px;
+        }
+        
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .remember-me input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+        }
+        
+        .forgot-password {
+            color: var(--primary-color);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .auth-btn {
+            width: 100%;
+            padding: 14px;
+            font-size: 1rem;
+        }
+        
+        .auth-divider {
+            text-align: center;
+            margin: 2rem 0;
+            position: relative;
+        }
+        
+        .auth-divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background-color: var(--border-color);
+        }
+        
+        .auth-divider span {
+            background: white;
+            padding: 0 1rem;
+            color: var(--text-lighter);
+            font-size: 0.9rem;
+        }
+        
+/* Social login removed for prototype */
+        
+        .auth-footer {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .auth-footer a {
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+        
+        .error-message {
+            color: #dc3545;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+        
+        .error-message.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-hospital-alt"></i>
+                <span>Sama Health</span>
+            </a>
+            <a href="index.html" class="btn btn-outline">
+                <i class="fas fa-arrow-left"></i> Retour à l'accueil
+            </a>
+        </div>
+    </nav>
+
+    <!-- Page de connexion -->
+    <main class="auth-page">
+        <div class="auth-container">
+            <div class="auth-card">
+                <div class="auth-header">
+                    <a href="index.html" class="logo">
+                        <i class="fas fa-hospital-alt"></i>
+                        <span>Sama Health</span>
+                    </a>
+                    <h1>Connectez-vous à votre compte</h1>
+                    <p>Accédez à vos rendez-vous et tickets médicaux</p>
+                </div>
+                
+                <form id="login-form" class="auth-form">
+                    <div class="form-group">
+                        <label for="email" class="form-label">Adresse email</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="email" class="form-control" placeholder="votre@email.com" required>
+                        </div>
+                        <div id="email-error" class="error-message"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password" class="form-label">Mot de passe</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="password" class="form-control" placeholder="Votre mot de passe" required>
+                        </div>
+                        <div id="password-error" class="error-message"></div>
+                    </div>
+                    
+                    <div class="form-options">
+                        <label class="remember-me">
+                            <input type="checkbox" id="remember">
+                            Se souvenir de moi
+                        </label>
+                        <a href="forgot-password.html" class="forgot-password">Mot de passe oublié ?</a>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary auth-btn">
+                        <i class="fas fa-sign-in-alt"></i> Se connecter
+                    </button>
+                </form>
+                
+                <div class="auth-footer">
+                    <p>Vous n'avez pas de compte ? <a href="signup.html">Créer un compte</a></p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginForm = document.getElementById('login-form');
+            const emailInput = document.getElementById('email');
+            const passwordInput = document.getElementById('password');
+            const emailError = document.getElementById('email-error');
+            const passwordError = document.getElementById('password-error');
+            
+            // Récupérer les données utilisateur stockées
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            
+            // Vérifier si "Se souvenir de moi" était coché
+            const savedEmail = localStorage.getItem('savedEmail');
+            if (savedEmail) {
+                emailInput.value = savedEmail;
+                document.getElementById('remember').checked = true;
+            }
+            
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Réinitialiser les messages d'erreur
+                emailError.textContent = '';
+                emailError.classList.remove('show');
+                passwordError.textContent = '';
+                passwordError.classList.remove('show');
+                
+                // Validation
+                let isValid = true;
+                const email = emailInput.value.trim();
+                const password = passwordInput.value.trim();
+                const remember = document.getElementById('remember').checked;
+                
+                // Validation email
+                if (!email) {
+                    emailError.textContent = 'L\'email est requis';
+                    emailError.classList.add('show');
+                    isValid = false;
+                } else if (!Utils.isValidEmail(email)) {
+                    emailError.textContent = 'Format d\'email invalide';
+                    emailError.classList.add('show');
+                    isValid = false;
+                }
+                
+                // Validation mot de passe
+                if (!password) {
+                    passwordError.textContent = 'Le mot de passe est requis';
+                    passwordError.classList.add('show');
+                    isValid = false;
+                } else if (password.length < 6) {
+                    passwordError.textContent = 'Le mot de passe doit avoir au moins 6 caractères';
+                    passwordError.classList.add('show');
+                    isValid = false;
+                }
+                
+                if (!isValid) return;
+                
+                // Vérifier les informations de connexion
+                const user = users.find(u => u.email === email && u.password === password);
+                
+                if (user) {
+                    // Sauvegarder l'email si "Se souvenir de moi" est coché
+                    if (remember) {
+                        localStorage.setItem('savedEmail', email);
+                    } else {
+                        localStorage.removeItem('savedEmail');
+                    }
+                    
+                    // Connecter l'utilisateur
+                    const authManager = new AuthManager();
+                    authManager.login(email, password);
+
+                    // Synchroniser l'état global si l'application est initialisée
+                    if (window.samaHealthApp && window.samaHealthApp.authManager) {
+                        window.samaHealthApp.authManager.currentUser = authManager.currentUser;
+                        Utils.saveToLocalStorage('currentUser', authManager.currentUser);
+                        // Mettre à jour l'UI et les liens auth
+                        window.samaHealthApp.checkAuth();
+                        window.samaHealthApp.updateUI();
+                    }
+
+                    // Afficher notification de succès
+                    window.samaHealthApp?.showNotification('Connexion réussie !', 'success');
+
+                    // Redirection (respecter paramètre ?redirect=... si présent)
+                    const params = new URLSearchParams(window.location.search);
+                    const redirectTo = params.get('redirect') || 'index.html';
+                    setTimeout(() => {
+                        window.location.href = redirectTo;
+                    }, 800);
+                    
+                } else {
+                    passwordError.textContent = 'Email ou mot de passe incorrect';
+                    passwordError.classList.add('show');
+                }
+            });
+            
+            // Social login handlers removed for prototype
+        });
+    </script>
+</body>
+</html>

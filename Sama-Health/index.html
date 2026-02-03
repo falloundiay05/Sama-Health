@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sama Health - Plateforme de Rendez-vous Médicaux</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <img src="images/logo.png" alt="Sama Health" class="navbar-logo">
+                <span>Sama Health</span>
+            </a>
+            <button class="menu-toggle" aria-label="Menu">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="nav-links">
+                <a href="index.html" class="active"><i class="fas fa-home"></i> Accueil</a>
+                <a href="hospitals.html"><i class="fas fa-hospital"></i> Établissements</a>
+                <a href="specialties.html"><i class="fas fa-user-md"></i> Services</a>
+                <div class="auth-links">
+                    <a href="login.html" class="btn btn-primary"><i class="fas fa-sign-in-alt"></i> Connexion</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Digitalisons l'accès aux hôpitaux publics</h1>
+                <p>Évitez les longues files d'attente, achetez vos tickets en ligne et prenez rendez-vous.</p>
+                <div class="hero-actions">
+                    <a href="hospitals.html" class="btn btn-primary btn-lg">
+                        <i class="fas fa-hospital"></i> Voir les établissements
+                    </a>
+                    <a href="appointment.html" class="btn btn-secondary btn-lg">
+                        <i class="fas fa-calendar-check"></i> Prendre un rendez-vous
+                    </a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="images/medical-illustration.png" alt="Plateforme de rendez-vous médicaux">
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title">Pourquoi choisir Sama Health ?</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-user-clock"></i>
+                    </div>
+                    <h3>Évitez les longues files</h3>
+                    <p>Plus besoin d'arriver tôt et d'attendre des heures à l'hôpital.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-ticket-alt"></i>
+                    </div>
+                    <h3>Tickets en ligne</h3>
+                    <p>Achetez vos tickets médicalement en ligne et présentez le QR code à votre arrivée.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-search-location"></i>
+                    </div>
+                    <h3>Trouvez facilement</h3>
+                    <p>Trouvez les établissements de santé les plus proches par nom ou service.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <h3>Notifications</h3>
+                    <p>Recevez des notifications et rappels pour vos rendez-vous et tickets.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Specialties Preview -->
+    <section class="specialties-preview">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Services disponibles</h2>
+                <a href="specialties.html" class="btn-link">Voir tous les services <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="specialties-grid" id="specialties-preview">
+                <!-- Chargé dynamiquement via JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- How it Works -->
+    <section class="how-it-works">
+        <div class="container">
+            <h2 class="section-title">Comment ça marche ?</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Choisissez un hôpital</h3>
+                    <p>Sélectionnez l'établissement public qui correspond à vos besoins.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Achetez votre ticket</h3>
+                    <p>Payez en ligne et recevez un ticket électronique avec QR code.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Prenez rendez-vous</h3>
+                    <p>Choisissez un créneau disponible pour votre consultation.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>Recevez des rappels</h3>
+                    <p>Recevez des rappels et informations utiles avant votre rendez-vous.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <a href="index.html" class="logo">
+                        <i class="fas fa-hospital-alt"></i>
+                        <span>Sama Health</span>
+                    </a>
+                    <p>Plateforme de digitalisation des hôpitaux publics pour éviter les files d'attente.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Navigation</h4>
+                    <ul>
+                        <li><a href="index.html">Accueil</a></li>
+                        <li><a href="hospitals.html">Établissements</a></li>
+                        <li><a href="specialties.html">Services</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Compte</h4>
+                    <ul>
+                        <li><a href="login.html">Connexion</a></li>
+                        <li><a href="profile.html">Mon profil</a></li>
+                        <li><a href="tickets.html">Mes tickets</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Contact</h4>
+                    <ul>
+                        <li><i class="fas fa-envelope"></i> contact@samahealth.sn</li>
+                        <li><i class="fas fa-phone"></i> +221 33 123 45 67</li>
+                        <li><i class="fas fa-map-marker-alt"></i> Dakar, Sénégal</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 Sama Health. Tous droits réservés. <a href="privacy.html">Politique de confidentialité</a> | <a href="terms.html">Conditions d'utilisation</a></p>
+                <p class="pwa-info">
+                    <i class="fas fa-mobile-alt"></i> Application PWA disponible - Fonctionne hors ligne
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Installation PWA Banner -->
+    <div class="pwa-banner" id="pwa-banner">
+        <div class="pwa-banner-content">
+            <i class="fas fa-download"></i>
+            <div>
+                <p>Installez Sama Health sur votre appareil pour un accès rapide, même hors ligne</p>
+                <small>Ajoutez à l'écran d'accueil pour une expérience optimale</small>
+            </div>
+        </div>
+        <button class="pwa-banner-btn" id="install-pwa">Installer</button>
+        <button class="pwa-banner-close" id="close-pwa-banner">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Charger les spécialités en avant-première
+        document.addEventListener('DOMContentLoaded', function() {
+            // Simulation de données - sera remplacé par un appel API
+            const services = [
+                { id: 1, name: "Consultation Générale", icon: "fas fa-stethoscope", count: 45 },
+                { id: 2, name: "Urgences", icon: "fas fa-ambulance", count: 28 },
+                { id: 3, name: "Pédiatrie", icon: "fas fa-baby", count: 32 },
+                { id: 4, name: "Radiologie", icon: "fas fa-x-ray", count: 25 },
+                { id: 5, name: "Laboratoire", icon: "fas fa-flask", count: 38 },
+                { id: 6, name: "Pharmacie", icon: "fas fa-pills", count: 42 }
+            ];
+            
+            const container = document.getElementById('specialties-preview');
+            services.forEach(service => {
+                const card = document.createElement('a');
+                card.href = `specialties.html?service=${encodeURIComponent(service.name)}`;
+                card.className = 'specialty-card';
+                card.innerHTML = `
+                    <div class="specialty-icon">
+                        <i class="${service.icon}"></i>
+                    </div>
+                    <h3>${service.name}</h3>
+                    <p>${service.count} établissements disponibles</p>
+                `;
+                container.appendChild(card);
+            });
+            
+            // Gestion du banner PWA
+            const pwaBanner = document.getElementById('pwa-banner');
+            const closeBannerBtn = document.getElementById('close-pwa-banner');
+            
+            if (closeBannerBtn) {
+                closeBannerBtn.addEventListener('click', function() {
+                    pwaBanner.style.display = 'none';
+                    localStorage.setItem('pwaBannerClosed', 'true');
+                });
+            }
+            
+            // Vérifier si l'utilisateur a déjà fermé le banner
+            if (localStorage.getItem('pwaBannerClosed') === 'true') {
+                pwaBanner.style.display = 'none';
+            }
+            
+            // Installation PWA
+            let deferredPrompt;
+            const installBtn = document.getElementById('install-pwa');
+            
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                pwaBanner.style.display = 'flex';
+            });
+            
+            if (installBtn) {
+                installBtn.addEventListener('click', async () => {
+                    if (deferredPrompt) {
+                        deferredPrompt.prompt();
+                        const { outcome } = await deferredPrompt.userChoice;
+                        if (outcome === 'accepted') {
+                            pwaBanner.style.display = 'none';
+                        }
+                        deferredPrompt = null;
+                    }
+                });
+            }
+            
+            // Gestion du menu responsive
+            const menuToggle = document.querySelector('.menu-toggle');
+            const navLinks = document.querySelector('.nav-links');
+            
+            if (menuToggle) {
+                menuToggle.addEventListener('click', function() {
+                    navLinks.classList.toggle('active');
+                });
+            }
+        });
+    </script>
+</body>
+</html>

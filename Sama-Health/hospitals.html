@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Établissements - Sama Health</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Page Spécifique - Établissements */
+        .page-header {
+            background: linear-gradient(135deg, #f0f7ff 0%, #e6f2ff 100%);
+            padding: 4rem 0;
+            margin-bottom: 3rem;
+        }
+        
+        .page-header-content {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .page-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+        
+        .page-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            margin-bottom: 2rem;
+        }
+        
+        /* Contrôles de recherche et filtres */
+        .controls-section {
+            background: white;
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+        
+        .search-container {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(42, 110, 143, 0.1);
+        }
+        
+        .filters-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .filter-label {
+            font-weight: 500;
+            color: var(--text-color);
+        }
+        
+        .filter-select {
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            background: white;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .sort-buttons {
+            display: flex;
+            gap: 0.5rem;
+            margin-left: auto;
+        }
+        
+        .sort-btn {
+            padding: 8px 16px;
+            border: 1px solid var(--border-color);
+            background: white;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.9rem;
+        }
+        
+        .sort-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        .sort-btn:hover:not(.active) {
+            background: var(--bg-light);
+        }
+        
+        /* Grille des hôpitaux */
+        .hospitals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .hospital-card {
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+        
+        .hospital-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .hospital-card-image {
+            height: 200px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hospital-card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .hospital-card-rating {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 6px 12px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-weight: 600;
+        }
+        
+        .hospital-card-rating i {
+            color: #FFD700;
+        }
+        
+        .hospital-card-content {
+            padding: 1.5rem;
+        }
+        
+        .hospital-card-title {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+        
+        .hospital-card-address {
+            color: var(--text-light);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .hospital-card-address i {
+            color: var(--accent-color);
+        }
+        
+        .hospital-card-description {
+            color: var(--text-color);
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+        
+        .hospital-card-services {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .service-tag {
+            background: rgba(52, 168, 83, 0.1);
+            color: var(--secondary-color);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        
+        .hospital-card-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: var(--bg-light);
+            border-radius: var(--radius-sm);
+        }
+        
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .info-item i {
+            color: var(--primary-color);
+            width: 20px;
+        }
+        
+        .hospital-card-actions {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .hospital-card-actions .btn {
+            flex: 1;
+            justify-content: center;
+        }
+        
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin: 3rem 0;
+        }
+        
+        .pagination-btn {
+            padding: 10px 20px;
+            border: 1px solid var(--border-color);
+            background: white;
+            border-radius: var(--radius);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+        }
+        
+        .pagination-btn:hover:not(.disabled) {
+            background: var(--bg-light);
+        }
+        
+        .pagination-btn.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .pagination-numbers {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .pagination-number {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--border-color);
+            background: white;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .pagination-number:hover {
+            background: var(--bg-light);
+        }
+        
+        .pagination-number.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        .pagination-ellipsis {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            color: var(--text-lighter);
+        }
+        
+        /* Compteur de résultats */
+        .results-counter {
+            text-align: center;
+            color: var(--text-light);
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: var(--bg-light);
+            border-radius: var(--radius);
+        }
+        
+        /* Message aucun résultat */
+        .no-results {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-light);
+        }
+        
+        .no-results i {
+            font-size: 4rem;
+            color: #ccc;
+            margin-bottom: 1.5rem;
+        }
+        
+        .no-results h3 {
+            margin-bottom: 1rem;
+            color: var(--text-color);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hospitals-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .search-container {
+                flex-direction: column;
+            }
+            
+            .filters-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .sort-buttons {
+                margin-left: 0;
+                justify-content: center;
+            }
+            
+            .hospital-card-info {
+                grid-template-columns: 1fr;
+            }
+            
+            .hospital-card-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <img src="images/logo.png" alt="Sama Health" class="navbar-logo">
+                <span>Sama Health</span>
+            </a>
+            <button class="menu-toggle" aria-label="Menu">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="nav-links">
+                <a href="index.html"><i class="fas fa-home"></i> Accueil</a>
+                <a href="hospitals.html" class="active"><i class="fas fa-hospital"></i> Établissements</a>
+                <a href="specialties.html"><i class="fas fa-user-md"></i> Services</a>
+                <div class="auth-links">
+                    <a href="login.html" class="btn btn-primary"><i class="fas fa-sign-in-alt"></i> Connexion</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- En-tête de page -->
+    <header class="page-header">
+        <div class="container">
+            <div class="page-header-content">
+                <h1 class="page-title">Établissements de Santé</h1>
+                <p class="page-subtitle">Trouvez l'hôpital ou le centre de santé le plus proche de vous</p>
+                <div class="search-container">
+                    <input type="text" 
+                           id="search-input" 
+                           class="search-input" 
+                           placeholder="Rechercher un hôpital, une adresse ou un service...">
+                    <button id="search-btn" class="btn btn-primary">
+                        <i class="fas fa-search"></i> Rechercher
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Contenu principal -->
+    <main class="container">
+        <!-- Contrôles de recherche et filtres -->
+        <section class="controls-section">
+            <div class="filters-container">
+                <div class="filter-group">
+                    <label class="filter-label">Filtrer par :</label>
+                    <select id="service-filter" class="filter-select">
+                        <option value="all">Tous les services</option>
+                        <option value="Consultation Générale">Consultation Générale</option>
+                        <option value="Urgences">Urgences</option>
+                        <option value="Pédiatrie">Pédiatrie</option>
+                        <option value="Radiologie">Radiologie</option>
+                        <option value="Laboratoire">Laboratoire</option>
+                        <option value="Pharmacie">Pharmacie</option>
+                        <option value="Dentiste">Dentiste</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label class="filter-label">Trier par :</label>
+                    <div class="sort-buttons">
+                        <button class="sort-btn" data-sort="name">
+                            <i class="fas fa-sort-alpha-down"></i> Nom
+                        </button>
+                        <button class="sort-btn" data-sort="waitingTime">
+                            <i class="fas fa-clock"></i> Temps d'attente
+                        </button>
+                        <button class="sort-btn" data-sort="rating">
+                            <i class="fas fa-star"></i> Note
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Compteur de résultats -->
+        <div class="results-counter" id="hospitals-counter">
+            Chargement des établissements...
+        </div>
+
+        <!-- Grille des hôpitaux -->
+        <div class="hospitals-grid" id="hospitals-container">
+            <!-- Les hôpitaux seront chargés ici dynamiquement -->
+        </div>
+
+        <!-- Pagination sera ajoutée dynamiquement -->
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <a href="index.html" class="logo">
+                        <i class="fas fa-hospital-alt"></i>
+                        <span>Sama Health</span>
+                    </a>
+                    <p>Plateforme de digitalisation des hôpitaux publics pour éviter les files d'attente.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Navigation</h4>
+                    <ul>
+                        <li><a href="index.html">Accueil</a></li>
+                        <li><a href="hospitals.html">Établissements</a></li>
+                        <li><a href="specialties.html">Services</a></li>
+                        <!-- Mes rendez-vous removed for MVP navigation -->
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Compte</h4>
+                    <ul>
+                        <li><a href="login.html">Connexion</a></li>
+                        <li><a href="profile.html">Mon profil</a></li>
+                        <li><a href="tickets.html">Mes tickets</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Contact</h4>
+                    <ul>
+                        <li><i class="fas fa-envelope"></i> contact@samahealth.sn</li>
+                        <li><i class="fas fa-phone"></i> +221 33 123 45 67</li>
+                        <li><i class="fas fa-map-marker-alt"></i> Dakar, Sénégal</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 Sama Health. Tous droits réservés. <a href="privacy.html">Politique de confidentialité</a> | <a href="terms.html">Conditions d'utilisation</a></p>
+                <p class="pwa-info">
+                    <i class="fas fa-mobile-alt"></i> Application PWA disponible - Fonctionne hors ligne
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="hospitals-loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialiser l'application
+            if (typeof window.samaHealthApp === 'undefined') {
+                window.samaHealthApp = new SamaHealthApp();
+            }
+            
+            // Initialiser les contrôles
+            initControls();
+            
+            // Charger les hôpitaux
+            hospitalsLoader.loadHospitals('hospitals-container');
+            
+            // Gestionnaire de recherche
+            document.getElementById('search-btn').addEventListener('click', function() {
+                const searchTerm = document.getElementById('search-input').value;
+                hospitalsLoader.searchHospitals(searchTerm, 'hospitals-container');
+            });
+            
+            // Recherche en temps réel
+            document.getElementById('search-input').addEventListener('keyup', function(e) {
+                if (e.key === 'Enter') {
+                    hospitalsLoader.searchHospitals(this.value, 'hospitals-container');
+                }
+            });
+            
+            // Filtre par service
+            document.getElementById('service-filter').addEventListener('change', function() {
+                hospitalsLoader.filterByService(this.value, 'hospitals-container');
+            });
+            
+            // Initialiser les boutons de tri
+            function initControls() {
+                const sortButtons = document.querySelectorAll('.sort-btn');
+                
+                sortButtons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        const sortType = this.getAttribute('data-sort');
+                        
+                        // Retirer la classe active de tous les boutons
+                        sortButtons.forEach(btn => btn.classList.remove('active'));
+                        
+                        // Activer le bouton cliqué
+                        this.classList.add('active');
+                        
+                        // Trier les hôpitaux
+                        hospitalsLoader.sortHospitals(sortType, 'hospitals-container');
+                    });
+                });
+                
+                // Activer le tri par nom par défaut
+                document.querySelector('[data-sort="name"]').classList.add('active');
+            }
+            
+            // Gestion du menu responsive
+            const menuToggle = document.querySelector('.menu-toggle');
+            const navLinks = document.querySelector('.nav-links');
+            
+            if (menuToggle) {
+                menuToggle.addEventListener('click', function() {
+                    navLinks.classList.toggle('active');
+                });
+            }
+            
+            // Fermer le menu en cliquant sur un lien
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', () => {
+                    navLinks.classList.remove('active');
+                });
+            });
+            
+            // Vérifier l'authentification
+            window.samaHealthApp.checkAuth();
+        });
+    </script>
+</body>
+</html>

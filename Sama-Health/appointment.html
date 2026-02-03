@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prendre Rendez-vous - Sama Health</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Page Spécifique - Rendez-vous */
+        .page-header {
+            background: linear-gradient(135deg, #f0f7ff 0%, #e6f2ff 100%);
+            padding: 4rem 0;
+            margin-bottom: 3rem;
+        }
+        
+        .page-header-content {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .page-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+        
+        .page-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            margin-bottom: 2rem;
+        }
+        
+        /* Étapes du processus */
+        .appointment-steps {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+        
+        .step {
+            text-align: center;
+            flex: 1;
+            min-width: 150px;
+            max-width: 200px;
+            position: relative;
+        }
+        
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: var(--border-color);
+            color: var(--text-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 0 auto 1rem;
+            transition: var(--transition);
+        }
+        
+        .step.active .step-number {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .step.completed .step-number {
+            background: var(--secondary-color);
+            color: white;
+        }
+        
+        .step h3 {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .step p {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+        
+        /* Formulaire de rendez-vous */
+        .appointment-form {
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 2.5rem;
+            margin-bottom: 3rem;
+        }
+        
+        .form-step {
+            display: none;
+        }
+        
+        .form-step.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .step-title {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            transition: var(--transition);
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(42, 110, 143, 0.1);
+        }
+        
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        /* Sélection d'hôpital */
+        .hospital-selection {
+            margin-bottom: 2rem;
+        }
+        
+        .hospitals-list-compact {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+        
+        .hospital-option {
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .hospital-option:hover {
+            border-color: var(--primary-color);
+            background: rgba(42, 110, 143, 0.05);
+        }
+        
+        .hospital-option.selected {
+            border-color: var(--primary-color);
+            background: rgba(42, 110, 143, 0.1);
+        }
+        
+        .hospital-option-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.5rem;
+        }
+        
+        .hospital-option-name {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        
+        .hospital-option-waiting {
+            background: var(--bg-light);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+        
+        .hospital-option-address {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+        }
+        
+        .hospital-option-services {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        
+        .service-tag-small {
+            background: rgba(52, 168, 83, 0.1);
+            color: var(--secondary-color);
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+        }
+        
+        /* Sélection de créneau */
+        .time-slots {
+            margin-bottom: 2rem;
+        }
+        
+        .date-selection {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            overflow-x: auto;
+            padding-bottom: 1rem;
+        }
+        
+        .date-option {
+            min-width: 100px;
+            padding: 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius);
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .date-option:hover {
+            border-color: var(--primary-color);
+        }
+        
+        .date-option.selected {
+            border-color: var(--primary-color);
+            background: rgba(42, 110, 143, 0.1);
+        }
+        
+        .date-day {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        
+        .date-month {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+        
+        .time-slots-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 0.5rem;
+        }
+        
+        .time-slot {
+            padding: 10px;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius);
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .time-slot:hover {
+            border-color: var(--primary-color);
+        }
+        
+        .time-slot.selected {
+            border-color: var(--primary-color);
+            background: rgba(42, 110, 143, 0.1);
+        }
+        
+        .time-slot.unavailable {
+            background: var(--bg-light);
+            color: var(--text-lighter);
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+        
+        /* Navigation du formulaire */
+        .form-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        /* Récapitulatif */
+        .appointment-summary {
+            background: var(--bg-light);
+            border-radius: var(--radius);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .summary-label {
+            font-weight: 500;
+            color: var(--text-color);
+        }
+        
+        .summary-value {
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+        
+        .summary-total {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .hospitals-list-compact {
+                grid-template-columns: 1fr;
+            }
+            
+            .date-selection {
+                flex-wrap: wrap;
+            }
+            
+            .appointment-steps {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <img src="images/logo.png" alt="Sama Health" class="navbar-logo">
+                <span>Sama Health</span>
+            </a>
+            <button class="menu-toggle" aria-label="Menu">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="nav-links">
+                <a href="index.html"><i class="fas fa-home"></i> Accueil</a>
+                <a href="hospitals.html"><i class="fas fa-hospital"></i> Établissements</a>
+                <a href="specialties.html"><i class="fas fa-user-md"></i> Services</a>
+                <a href="appointment.html" class="active"><i class="fas fa-calendar-check"></i> Mes RDV</a>
+                <div class="auth-links">
+                    <a href="login.html" class="btn btn-primary"><i class="fas fa-sign-in-alt"></i> Connexion</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- En-tête de page -->
+    <header class="page-header">
+        <div class="container">
+            <div class="page-header-content">
+                <h1 class="page-title">Prendre un Rendez-vous</h1>
+                <p class="page-subtitle">Réservez votre consultation en ligne en quelques étapes simples</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Contenu principal -->
+    <main class="container">
+        <!-- Étapes du processus -->
+        <div class="appointment-steps">
+            <div class="step completed" id="step1-indicator">
+                <div class="step-number">1</div>
+                <h3>Choix de l'hôpital</h3>
+                <p>Sélectionnez un établissement</p>
+            </div>
+            <div class="step active" id="step2-indicator">
+                <div class="step-number">2</div>
+                <h3>Choix du service</h3>
+                <p>Sélectionnez un service</p>
+            </div>
+            <div class="step" id="step3-indicator">
+                <div class="step-number">3</div>
+                <h3>Date et heure</h3>
+                <p>Choisissez un créneau</p>
+            </div>
+            <div class="step" id="step4-indicator">
+                <div class="step-number">4</div>
+                <h3>Confirmation</h3>
+                <p>Finalisez votre RDV</p>
+            </div>
+        </div>
+
+        <!-- Formulaire de rendez-vous -->
+        <div class="appointment-form">
+            <!-- Étape 1: Choix de l'hôpital -->
+            <div class="form-step active" id="step1">
+                <h2 class="step-title"><i class="fas fa-hospital"></i> Sélectionnez un hôpital</h2>
+                
+                <div class="form-group">
+                    <label class="form-label">Rechercher un hôpital</label>
+                    <input type="text" 
+                           id="hospital-search" 
+                           class="form-control" 
+                           placeholder="Nom, adresse ou service...">
+                </div>
+                
+                <div class="hospital-selection">
+                    <div class="hospitals-list-compact" id="hospitals-list">
+                        <!-- Les hôpitaux seront chargés ici dynamiquement -->
+                    </div>
+                </div>
+                
+                <div class="form-navigation">
+                    <a href="index.html" class="btn btn-outline">
+                        <i class="fas fa-times"></i> Annuler
+                    </a>
+                </div>
+            </div>
+
+            <!-- Étape 2: Choix du service -->
+            <div class="form-step" id="step2">
+                <h2 class="step-title"><i class="fas fa-stethoscope"></i> Sélectionnez un service</h2>
+                
+                <div id="hospital-info" style="margin-bottom: 2rem; padding: 1.5rem; background: var(--bg-light); border-radius: var(--radius);">
+                    <p style="margin: 0;"><strong>Hôpital sélectionné :</strong> <span id="selected-hospital-name">Aucun hôpital sélectionné</span></p>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Type de service</label>
+                    <div class="services-list" id="services-list">
+                        <!-- Les services seront chargés ici dynamiquement -->
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="reason" class="form-label">Motif de la consultation</label>
+                    <textarea id="reason" class="form-control form-textarea" placeholder="Décrivez brièvement le motif de votre consultation..."></textarea>
+                </div>
+                
+                <div class="form-navigation">
+                    <a href="index.html" class="btn btn-outline">
+                        <i class="fas fa-times"></i> Annuler
+                    </a>
+                </div>
+            </div>
+
+            <!-- Étape 3: Date et heure -->
+            <div class="form-step" id="step3">
+                <h2 class="step-title"><i class="fas fa-calendar-alt"></i> Choisissez une date et heure</h2>
+                
+                <div id="service-info" style="margin-bottom: 2rem; padding: 1.5rem; background: var(--bg-light); border-radius: var(--radius);">
+                    <p style="margin: 0;"><strong>Service sélectionné :</strong> <span id="selected-service-name">Aucun service sélectionné</span></p>
+                </div>
+                
+                <div class="time-slots">
+                    <div class="form-group">
+                        <label class="form-label">Sélectionnez une date</label>
+                        <div class="date-selection" id="date-selection">
+                            <!-- Les dates seront générées dynamiquement -->
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Sélectionnez un horaire</label>
+                        <div class="time-slots-grid" id="time-slots">
+                            <!-- Les créneaux horaires seront générés dynamiquement -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-navigation">
+                    <a href="index.html" class="btn btn-outline">
+                        <i class="fas fa-times"></i> Annuler
+                    </a>
+                </div>
+            </div>
+
+            <!-- Étape 4: Confirmation -->
+            <div class="form-step" id="step4">
+                <h2 class="step-title"><i class="fas fa-check-circle"></i> Confirmez votre rendez-vous</h2>
+                
+                <div class="appointment-summary">
+                    <div class="summary-item">
+                        <span class="summary-label">Hôpital :</span>
+                        <span class="summary-value" id="summary-hospital">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Service :</span>
+                        <span class="summary-value" id="summary-service">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Date :</span>
+                        <span class="summary-value" id="summary-date">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Heure :</span>
+                        <span class="summary-value" id="summary-time">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Motif :</span>
+                        <span class="summary-value" id="summary-reason">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Temps d'attente estimé :</span>
+                        <span class="summary-value" id="summary-waiting">-</span>
+                    </div>
+                    <div class="summary-item" style="border-bottom: none;">
+                        <span class="summary-label">Numéro de ticket :</span>
+                        <span class="summary-value summary-total" id="summary-ticket">-</span>
+                    </div>
+                </div>
+                
+                <!-- Patient information now auto-populated from user profile -->
+                
+                <!-- Payment removed for prototype -->
+                
+                <div class="form-navigation">
+                    <button type="button" class="btn btn-outline" onclick="prevStep()">
+                        <i class="fas fa-arrow-left"></i> Retour
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="confirmAppointment()">
+                        <i class="fas fa-check"></i> Confirmer le RDV
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <a href="index.html" class="logo">
+                        <i class="fas fa-hospital-alt"></i>
+                        <span>Sama Health</span>
+                    </a>
+                    <p>Plateforme de digitalisation des hôpitaux publics pour éviter les files d'attente.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Navigation</h4>
+                    <ul>
+                        <li><a href="index.html">Accueil</a></li>
+                        <li><a href="hospitals.html">Établissements</a></li>
+                        <li><a href="specialties.html">Services</a></li>
+                        <li><a href="appointment.html">Mes rendez-vous</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Compte</h4>
+                    <ul>
+                        <li><a href="login.html">Connexion</a></li>
+                        <li><a href="profile.html">Mon profil</a></li>
+                        <li><a href="tickets.html">Mes tickets</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Contact</h4>
+                    <ul>
+                        <li><i class="fas fa-envelope"></i> contact@samahealth.sn</li>
+                        <li><i class="fas fa-phone"></i> +221 33 123 45 67</li>
+                        <li><i class="fas fa-map-marker-alt"></i> Dakar, Sénégal</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 Sama Health. Tous droits réservés. <a href="privacy.html">Politique de confidentialité</a> | <a href="terms.html">Conditions d'utilisation</a></p>
+                <p class="pwa-info">
+                    <i class="fas fa-mobile-alt"></i> Application PWA disponible - Fonctionne hors ligne
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="hospitals-loader.js"></script>
+    <script>
+        // Variables globales
+        let currentStep = 1;
+        let selectedHospital = null;
+        let selectedService = null;
+        let selectedDate = null;
+        let selectedTime = null;
+        let appointmentData = {};
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialiser l'application
+            if (typeof window.samaHealthApp === 'undefined') {
+                window.samaHealthApp = new SamaHealthApp();
+            }
+            
+            // Charger les hôpitaux pour l'étape 1
+            loadHospitalsForSelection();
+            
+            // Gérer les paramètres d'URL
+            handleUrlParams();
+            
+            // Gestion du menu responsive
+            const menuToggle = document.querySelector('.menu-toggle');
+            const navLinks = document.querySelector('.nav-links');
+            
+            if (menuToggle) {
+                menuToggle.addEventListener('click', function() {
+                    navLinks.classList.toggle('active');
+                });
+            }
+            
+            // Fermer le menu en cliquant sur un lien
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', () => {
+                    navLinks.classList.remove('active');
+                });
+            });
+            
+            // Vérifier l'authentification
+            const isAuthenticated = window.samaHealthApp.authManager.isAuthenticated();
+            if (!isAuthenticated) {
+                window.samaHealthApp.showNotification('Veuillez vous connecter pour prendre rendez-vous', 'error');
+                setTimeout(() => {
+                    window.location.href = 'login.html?redirect=appointment.html';
+                }, 2000);
+            }
+        });
+
+        function loadHospitalsForSelection() {
+            const hospitals = hospitalsLoader.hospitals;
+            const container = document.getElementById('hospitals-list');
+            container.innerHTML = '';
+            
+            hospitals.forEach(hospital => {
+                const hospitalOption = document.createElement('div');
+                hospitalOption.className = 'hospital-option';
+                hospitalOption.dataset.id = hospital.id;
+                hospitalOption.innerHTML = `
+                    <div class="hospital-option-header">
+                        <div class="hospital-option-name">${hospital.name}</div>
+                        <div class="hospital-option-waiting">${hospital.waitingTime} min</div>
+                    </div>
+                    <div class="hospital-option-address">
+                        <i class="fas fa-map-marker-alt"></i> ${hospital.address}
+                    </div>
+                    <div class="hospital-option-services">
+                        ${hospital.services.slice(0, 3).map(service => 
+                            `<span class="service-tag-small">${service}</span>`
+                        ).join('')}
+                        ${hospital.services.length > 3 ? 
+                            `<span class="service-tag-small">+${hospital.services.length - 3}</span>` : ''
+                        }
+                    </div>
+                `;
+                
+                hospitalOption.addEventListener('click', function() {
+                    // Désélectionner tous les hôpitaux
+                    document.querySelectorAll('.hospital-option').forEach(option => {
+                        option.classList.remove('selected');
+                    });
+                    
+                    // Sélectionner cet hôpital
+                    this.classList.add('selected');
+                    selectedHospital = hospital;
+                    
+                    // Mettre à jour l'indicateur
+                    document.getElementById('step1-indicator').classList.add('completed');
+                    document.getElementById('step2-indicator').classList.add('active');
+                    // Avancer automatiquement à la prochaine étape
+                    setTimeout(() => {
+                        nextStep();
+                    }, 300);
+                });
+                
+                container.appendChild(hospitalOption);
+            });
+            
+            // Recherche d'hôpital
+            document.getElementById('hospital-search').addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                const options = document.querySelectorAll('.hospital-option');
+                
+                options.forEach(option => {
+                    const name = option.querySelector('.hospital-option-name').textContent.toLowerCase();
+                    const address = option.querySelector('.hospital-option-address').textContent.toLowerCase();
+                    
+                    if (name.includes(searchTerm) || address.includes(searchTerm)) {
+                        option.style.display = 'block';
+                    } else {
+                        option.style.display = 'none';
+                    }
+                });
+            });
+        }
+
+        function handleUrlParams() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const hospitalId = urlParams.get('hospital');
+            
+            if (hospitalId) {
+                // Sélectionner automatiquement l'hôpital
+                setTimeout(() => {
+                    const hospitalOption = document.querySelector(`.hospital-option[data-id="${hospitalId}"]`);
+                    if (hospitalOption) {
+                        hospitalOption.click();
+                        nextStep();
+                    }
+                }, 500);
+            }
+        }
+
+        function nextStep() {
+            // Validation de l'étape actuelle
+            if (currentStep === 1 && !selectedHospital) {
+                window.samaHealthApp.showNotification('Veuillez sélectionner un hôpital', 'error');
+                return;
+            }
+            
+            if (currentStep === 2 && !selectedService) {
+                window.samaHealthApp.showNotification('Veuillez sélectionner un service', 'error');
+                return;
+            }
+            
+            if (currentStep === 3 && (!selectedDate || !selectedTime)) {
+                window.samaHealthApp.showNotification('Veuillez sélectionner une date et une heure', 'error');
+                return;
+            }
+            
+            // Préparer l'étape suivante
+            if (currentStep === 1) {
+                // Afficher les services de l'hôpital sélectionné
+                loadServicesForHospital();
+                document.getElementById('selected-hospital-name').textContent = selectedHospital.name;
+            } else if (currentStep === 2) {
+                // Générer les dates et créneaux horaires
+                generateDates();
+                document.getElementById('selected-service-name').textContent = selectedService;
+            } else if (currentStep === 3) {
+                // Préparer le récapitulatif
+                prepareSummary();
+            }
+            
+            // Passer à l'étape suivante
+            document.getElementById(`step${currentStep}`).classList.remove('active');
+            currentStep++;
+            document.getElementById(`step${currentStep}`).classList.add('active');
+            
+            // Mettre à jour les indicateurs
+            updateStepIndicators();
+            
+            // Faire défiler vers le haut
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function prevStep() {
+            // Revenir à l'étape précédente
+            document.getElementById(`step${currentStep}`).classList.remove('active');
+            currentStep--;
+            document.getElementById(`step${currentStep}`).classList.add('active');
+            
+            // Mettre à jour les indicateurs
+            updateStepIndicators();
+            
+            // Faire défiler vers le haut
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function updateStepIndicators() {
+            // Réinitialiser tous les indicateurs
+            for (let i = 1; i <= 4; i++) {
+                const indicator = document.getElementById(`step${i}-indicator`);
+                indicator.classList.remove('completed', 'active');
+            }
+            
+            // Marquer les étapes précédentes comme complétées
+            for (let i = 1; i < currentStep; i++) {
+                document.getElementById(`step${i}-indicator`).classList.add('completed');
+            }
+            
+            // Marquer l'étape actuelle comme active
+            document.getElementById(`step${currentStep}-indicator`).classList.add('active');
+        }
+
+        function loadServicesForHospital() {
+            if (!selectedHospital) return;
+            
+            const container = document.getElementById('services-list');
+            container.innerHTML = '';
+            
+            selectedHospital.services.forEach(service => {
+                const serviceOption = document.createElement('div');
+                serviceOption.className = 'hospital-option';
+                serviceOption.style.marginBottom = '1rem';
+                serviceOption.innerHTML = `
+                    <div class="hospital-option-name">${service}</div>
+                `;
+                
+                serviceOption.addEventListener('click', function() {
+                    // Désélectionner tous les services
+                    document.querySelectorAll('#services-list .hospital-option').forEach(option => {
+                        option.classList.remove('selected');
+                    });
+                    
+                    // Sélectionner ce service
+                    this.classList.add('selected');
+                    selectedService = service;
+                    // Avancer automatiquement
+                    setTimeout(() => {
+                        nextStep();
+                    }, 250);
+                });
+                
+                container.appendChild(serviceOption);
+            });
+        }
+
+        function generateDates() {
+            const dateContainer = document.getElementById('date-selection');
+            dateContainer.innerHTML = '';
+            
+            // Générer les 7 prochains jours
+            for (let i = 0; i < 7; i++) {
+                const date = new Date();
+                date.setDate(date.getDate() + i);
+                
+                const dateOption = document.createElement('div');
+                dateOption.className = 'date-option';
+                if (i === 0) {
+                    dateOption.classList.add('selected');
+                    selectedDate = date;
+                }
+                
+                dateOption.innerHTML = `
+                    <div class="date-day">${date.getDate()}</div>
+                    <div class="date-month">${date.toLocaleDateString('fr-FR', { month: 'short' })}</div>
+                `;
+                
+                dateOption.addEventListener('click', function() {
+                    // Désélectionner toutes les dates
+                    document.querySelectorAll('.date-option').forEach(option => {
+                        option.classList.remove('selected');
+                    });
+                    
+                    // Sélectionner cette date
+                    this.classList.add('selected');
+                    selectedDate = date;
+                    
+                    // Générer les créneaux horaires pour cette date
+                    generateTimeSlots();
+                });
+                
+                dateContainer.appendChild(dateOption);
+            }
+            
+            // Générer les créneaux horaires pour aujourd'hui
+            generateTimeSlots();
+        }
+
+        function generateTimeSlots() {
+            const timeContainer = document.getElementById('time-slots');
+            timeContainer.innerHTML = '';
+            
+            // Heures d'ouverture (8h-18h)
+            const startHour = 8;
+            const endHour = 18;
+            const interval = 30; // minutes
+            
+            for (let hour = startHour; hour < endHour; hour++) {
+                for (let minute = 0; minute < 60; minute += interval) {
+                    const timeString = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+                    
+                    // Simuler la disponibilité (70% de créneaux disponibles)
+                    const isAvailable = Math.random() > 0.3;
+                    
+                    const timeSlot = document.createElement('div');
+                    timeSlot.className = `time-slot ${isAvailable ? '' : 'unavailable'}`;
+                    timeSlot.textContent = timeString;
+                    
+                    if (isAvailable) {
+                        timeSlot.addEventListener('click', function() {
+                            // Désélectionner tous les créneaux
+                            document.querySelectorAll('.time-slot:not(.unavailable)').forEach(slot => {
+                                slot.classList.remove('selected');
+                            });
+                            
+                            // Sélectionner ce créneau
+                            this.classList.add('selected');
+                            selectedTime = timeString;
+                            // Avancer automatiquement une fois l'heure sélectionnée
+                            setTimeout(() => {
+                                nextStep();
+                            }, 250);
+                        });
+                    }
+                    
+                    timeContainer.appendChild(timeSlot);
+                }
+            }
+        }
+
+        function prepareSummary() {
+            // Mettre à jour le récapitulatif
+            document.getElementById('summary-hospital').textContent = selectedHospital.name;
+            document.getElementById('summary-service').textContent = selectedService;
+            document.getElementById('summary-date').textContent = selectedDate.toLocaleDateString('fr-FR', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            document.getElementById('summary-time').textContent = selectedTime;
+            document.getElementById('summary-reason').textContent = document.getElementById('reason').value || 'Non spécifié';
+            document.getElementById('summary-waiting').textContent = `${selectedHospital.waitingTime} minutes`;
+            
+            // Générer un numéro de ticket temporaire
+            const tempTicket = `TEMP-${Date.now().toString().substr(-6)}`;
+            document.getElementById('summary-ticket').textContent = tempTicket;
+            
+            // Stocker les données du rendez-vous
+            appointmentData = {
+                hospital: selectedHospital,
+                service: selectedService,
+                date: selectedDate,
+                time: selectedTime,
+                reason: document.getElementById('reason').value,
+                waitingTime: selectedHospital.waitingTime,
+                ticketNumber: tempTicket
+            };
+        }
+
+        function confirmAppointment() {
+            // Patient information is now auto-populated from user profile
+            
+            // Afficher l'animation de chargement
+            window.samaHealthApp.showLoading();
+            
+            // Simuler un délai de traitement
+            setTimeout(() => {
+                // Construire dateTime ISO à partir de la date et de l'heure sélectionnées
+                const [hour, minute] = selectedTime.split(':');
+                const dt = new Date(selectedDate);
+                dt.setHours(parseInt(hour, 10), parseInt(minute, 10), 0, 0);
+                const dateTimeISO = dt.toISOString();
+
+                // Appeler le manager pour créer le rendez-vous (gère la persistance et le profil)
+                const am = window.samaHealthApp.appointmentManager;
+                const result = am.bookAppointment(selectedHospital.id, selectedService, dateTimeISO);
+
+                // Cacher l'animation de chargement
+                window.samaHealthApp.hideLoading();
+
+                if (result.success) {
+                    const appointment = result.appointment;
+
+                    // Préparer les données pour la page de confirmation
+                    const finalAppointment = {
+                        appointmentId: appointment.id,
+                        hospital: selectedHospital,
+                        service: appointment.service,
+                        date: appointment.dateTime,
+                        time: new Date(appointment.dateTime).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }),
+                        ticketNumber: appointment.ticketNumber,
+                        qrCode: appointment.qrCode,
+                        status: appointment.status
+                    };
+
+                    // Afficher le succès
+                    window.samaHealthApp.showNotification('Rendez-vous confirmé avec succès !', 'success');
+
+                    // Rediriger vers la page de confirmation
+                    setTimeout(() => {
+                        sessionStorage.setItem('lastAppointment', JSON.stringify(finalAppointment));
+                        window.location.href = 'appointment-confirmation.html';
+                    }, 800);
+                } else {
+                    window.samaHealthApp.showNotification(result.message || 'Erreur lors de la création du rendez-vous', 'error');
+                }
+                
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
